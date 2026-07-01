@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 彰化師大化學營｜行前準備站</title>
+<meta name="description" content="2026 彰化師大化學營行前數位準備指南：時程、裝備清單、交通導航與營隊守則。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- decorative hexagon field -->
+<svg class="bg-hex" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="hexPattern" width="56" height="64" patternUnits="userSpaceOnUse" patternTransform="scale(1)">
+      <path d="M28 0 L56 16 L56 48 L28 64 L0 48 L0 16 Z" fill="none" stroke="currentColor" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#hexPattern)"/>
+</svg>
+
+<button id="navToggle" class="nav-toggle" aria-label="開啟選單" aria-expanded="false" aria-controls="sidebar">
+  <span></span><span></span><span></span>
+</button>
+
+<nav id="sidebar" class="sidebar">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 40 40" width="34" height="34"><path d="M16 4h8v8l8 16a4 4 0 0 1-3.6 5.8H11.6A4 4 0 0 1 8 28l8-16V4z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><line x1="13" y1="14" x2="27" y2="14" stroke="currentColor" stroke-width="2.4"/></svg>
+    </span>
+    <div>
+      <p class="brand-eyebrow">NCUE · 2026</p>
+      <p class="brand-title">化學營準備站</p>
+    </div>
+  </div>
+  <ul class="nav-list">
+    <li><a href="#home" class="nav-link active" data-label="01">首頁總覽</a></li>
+    <li><a href="#schedule" class="nav-link" data-label="02">任務時程</a></li>
+    <li><a href="#checklist" class="nav-link" data-label="03">裝備清單</a></li>
+    <li><a href="#transport" class="nav-link" data-label="04">交通導航</a></li>
+    <li><a href="#rules" class="nav-link" data-label="05">營隊守則</a></li>
+    <li><a href="#contact" class="nav-link" data-label="06">聯絡窗口</a></li>
+  </ul>
+  <div class="sidebar-foot">
+    <p>行前準備進度</p>
+    <div class="mini-progress"><div id="miniProgressFill" class="mini-progress-fill"></div></div>
+    <p id="miniProgressLabel" class="mini-progress-label">0% 完成</p>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ============ HERO / 首頁 ============ -->
+  <section id="home" class="section hero">
+    <div class="hero-inner">
+      <p class="eyebrow">行前數位通知書 · 4 天 3 夜</p>
+      <h1>2026 彰化師大<br><span class="accent">化學營</span>行前準備站</h1>
+      <p class="hero-sub">把紙本通知書，變成一份會跟你互動的出發清單。捲動瀏覽四天三夜的全部細節 — 時間、地點、該帶什麼、怎麼去。</p>
+
+      <div class="hero-stats">
+        <div class="stat-card">
+          <p class="stat-label">營期</p>
+          <p class="stat-value">7/20<span class="stat-unit">（四）</span> – 7/23<span class="stat-unit">（日）</span></p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">第一天報到</p>
+          <p class="stat-value">09:20<span class="stat-unit">–10:00</span></p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">結營拔營</p>
+          <p class="stat-value">7/23 16:30</p>
+        </div>
+      </div>
+
+      <div class="hero-cta">
+        <a href="#checklist" class="btn btn-primary">開始整理裝備 →</a>
+        <a href="#transport" class="btn btn-ghost">查交通路線</a>
+      </div>
+    </div>
+
+    <!-- signature element: animated molecule -->
+    <div class="hero-art" aria-hidden="true">
+      <svg viewBox="0 0 360 360" class="molecule">
+        <g class="bond-group">
+          <line x1="180" y1="60"  x2="260" y2="105"/>
+          <line x1="260" y1="105" x2="260" y2="195"/>
+          <line x1="260" y1="195" x2="180" y2="240"/>
+          <line x1="180" y1="240" x2="100" y2="195"/>
+          <line x1="100" y1="195" x2="100" y2="105"/>
+          <line x1="100" y1="105" x2="180" y2="60"/>
+          <line x1="180" y1="240" x2="180" y2="300"/>
+          <line x1="100" y1="105" x2="40"  y2="70"/>
+          <line x1="260" y1="105" x2="320" y2="70"/>
+        </g>
+        <g class="atom-group">
+          <circle cx="180" cy="60"  r="9"/>
+          <circle cx="260" cy="105" r="9"/>
+          <circle cx="260" cy="195" r="9"/>
+          <circle cx="180" cy="240" r="11" class="atom-o"/>
+          <circle cx="100" cy="195" r="9"/>
+          <circle cx="100" cy="105" r="9"/>
+          <circle cx="180" cy="300" r="7" class="atom-h"/>
+          <circle cx="40"  cy="70"  r="7" class="atom-h"/>
+          <circle cx="320" cy="70"  r="7" class="atom-h"/>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ============ SCHEDULE ============ -->
+  <section id="schedule" class="section">
+    <header class="section-head">
+      <p class="eyebrow">02 · Timeframe &amp; Base</p>
+      <h2>任務時程與基地</h2>
+      <p class="section-desc">活動全程皆有隊輔陪同，亦有為學員投保保險。</p>
+    </header>
+
+    <div class="card-grid">
+      <article class="card">
+        <p class="card-icon" aria-hidden="true">🗓️</p>
+        <h3>任務時程</h3>
+        <dl class="data-list">
+          <div><dt>啟動報到</dt><dd>115/7/20（四）09:20–10:00</dd></div>
+          <div><dt>結營拔營</dt><dd>115/7/23（日）16:30</dd></div>
+          <div><dt>總時長</dt><dd>四天三夜</dd></div>
+        </dl>
+      </article>
+
+      <article class="card">
+        <p class="card-icon" aria-hidden="true">🏛️</p>
+        <h3>主基地</h3>
+        <p class="card-body">彰化師大 進德校區（住宿與主課程基地）</p>
+        <p class="card-addr">500 彰化縣彰化市進德路 1 號</p>
+      </article>
+
+      <article class="card card-wide">
+        <p class="card-icon" aria-hidden="true">🧪</p>
+        <h3>移地考察 Field Expeditions</h3>
+        <ul class="pin-list">
+          <li><span class="pin">📍</span>廣源良絲瓜水體驗工廠 — 506 彰化縣福興鄉福工路 13-1 號</li>
+          <li><span class="pin">📍</span>台塑生醫健康悠活館 — 500 彰化縣彰化市中山路三段 359 號</li>
+        </ul>
+        <div class="badge-row">
+          <span class="badge">✔ 全程隊輔陪同</span>
+          <span class="badge">✔ 含專屬保險</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ CHECKLIST ============ -->
+  <section id="checklist" class="section section-alt">
+    <header class="section-head">
+      <p class="eyebrow">03 · Equipment</p>
+      <h2>裝備清單</h2>
+      <p class="section-desc">勾選你已經準備好的物品，燒杯會即時顯示你的整備進度。資料只存在這台裝置裡。</p>
+    </header>
+
+    <div class="checklist-layout">
+      <div class="beaker-wrap" aria-hidden="true">
+        <svg viewBox="0 0 200 260" class="beaker">
+          <defs>
+            <clipPath id="liquidClip">
+              <path d="M40 30 L40 90 L8 230 a14 14 0 0 0 14 24 L178 254 a14 14 0 0 0 14-24 L160 90 L160 30 Z"/>
+            </clipPath>
+          </defs>
+          <rect id="liquid" x="0" y="260" width="200" height="0" fill="url(#liquidGradient)" clip-path="url(#liquidClip)"/>
+          <linearGradient id="liquidGradient" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0%" stop-color="#FF7A30"/>
+            <stop offset="100%" stop-color="#FFD166"/>
+          </linearGradient>
+          <path d="M40 30 L40 90 L8 230 a14 14 0 0 0 14 24 L178 254 a14 14 0 0 0 14-24 L160 90 L160 30" fill="none" stroke="#102A43" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
+          <line x1="30" y1="30" x2="170" y2="30" stroke="#102A43" stroke-width="6" stroke-linecap="round"/>
+          <line x1="52" y1="120" x2="68" y2="120" stroke="#102A43" stroke-width="3" opacity="0.5"/>
+          <line x1="52" y1="160" x2="68" y2="160" stroke="#102A43" stroke-width="3" opacity="0.5"/>
+          <line x1="52" y1="200" x2="68" y2="200" stroke="#102A43" stroke-width="3" opacity="0.5"/>
+        </svg>
+        <p id="progressPercent" class="progress-percent">0%</p>
+        <p class="progress-caption">裝備整備完成</p>
+      </div>
+
+      <div class="checklist-cols">
+        <div class="check-group">
+          <h3>日常與個人物品</h3>
+          <ul class="check-list" data-group="daily">
+            <li><label><input type="checkbox" data-item="衣物"><span>個人換洗衣物（含內衣褲）</span></label></li>
+            <li><label><input type="checkbox" data-item="盥洗"><span>盥洗用品（牙刷、毛巾、沐浴乳等）</span></label></li>
+            <li><label><input type="checkbox" data-item="吹風機"><span>個人吹風機</span></label></li>
+            <li><label><input type="checkbox" data-item="餐具水壺"><span>環保餐具與水壺（營區環保守則）</span></label></li>
+            <li><label><input type="checkbox" data-item="防曬防蚊"><span>防曬乳、防蚊液</span></label></li>
+            <li><label><input type="checkbox" data-item="雨具"><span>雨具</span></label></li>
+          </ul>
+        </div>
+
+        <div class="check-group">
+          <h3>防護與隨身小物</h3>
+          <ul class="check-list" data-group="protect">
+            <li><label><input type="checkbox" data-item="藥品"><span>個人藥品（特殊用藥）</span></label></li>
+            <li><label><input type="checkbox" data-item="口罩"><span>醫療用口罩</span></label></li>
+            <li><label><input type="checkbox" data-item="證件"><span>個人身分證件與健保卡</span></label></li>
+            <li><label><input type="checkbox" data-item="現金"><span>少量現金</span></label></li>
+          </ul>
+        </div>
+
+        <div class="check-group check-group-warning">
+          <h3>⚠ 過夜必備（宿舍不提供寢具）</h3>
+          <p class="warning-note">本營隊宿舍僅提供床位，<strong>沒有提供任何寢具</strong>，請務必自備。宿舍內備有洗衣機／烘衣機，費用為 20 元／次。</p>
+          <ul class="check-list" data-group="bedding">
+            <li><label><input type="checkbox" data-item="睡袋棉被"><span>睡袋 / 小棉被</span></label></li>
+            <li><label><input type="checkbox" data-item="枕頭"><span>個人枕頭</span></label></li>
+          </ul>
+        </div>
+
+        <div class="check-group check-group-warning">
+          <h3>⚠ 實驗護甲（實驗室強制規定）</h3>
+          <p class="warning-note">第一天與第二天有實驗課，<strong>務必穿著長褲及包鞋</strong>，嚴禁涼鞋／拖鞋進入實驗室。</p>
+          <ul class="check-list" data-group="lab">
+            <li><label><input type="checkbox" data-item="長褲"><span>長褲（Day 1 &amp; Day 2 必穿）</span></label></li>
+            <li><label><input type="checkbox" data-item="包鞋"><span>包鞋（Day 1 &amp; Day 2 必穿）</span></label></li>
+            <li><label><input type="checkbox" data-item="實驗衣"><span>實驗衣（已有者請務必自行攜帶）</span></label></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TRANSPORT ============ -->
+  <section id="transport" class="section">
+    <header class="section-head">
+      <p class="eyebrow">04 · Transport Routing</p>
+      <h2>交通導航</h2>
+      <p class="section-desc">目的地統一是「彰化縣原住民生活館」下車，步行約 10 分鐘即可抵達進德校區營區，也可直接搭計程車前來。</p>
+    </header>
+
+    <div class="tabs" role="tablist" aria-label="交通方式">
+      <button class="tab active" role="tab" aria-selected="true" data-tab="train">🚆 火車</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="hsr">🚄 高鐵</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="hsr-train">🔁 高鐵+火車</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="car">🚗 自行開車</button>
+    </div>
+
+    <div class="tab-panel active" id="panel-train">
+      <p>從<strong>彰化火車站</strong>搭乘「彰化客運」往台中方向、或「台中客運」101 路線，於「彰化縣原住民生活館」下車，步行約 10 分鐘抵達；也可搭乘計程車前來。</p>
+      <div class="table-wrap">
+        <table>
+          <caption>彰化客運時刻表｜彰化火車站 → 原住民生活館</caption>
+          <thead><tr><th>車次（路線）</th><th>出發時間</th><th>抵達時間</th></tr></thead>
+          <tbody>
+            <tr><td>6917（經南崗）</td><td>09:00</td><td>09:10</td></tr>
+            <tr><td>6918（經林子頭）</td><td>09:20</td><td>09:30</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <caption>台中客運時刻表｜彰化火車站 → 原住民生活館</caption>
+          <thead><tr><th>車次（路線）</th><th>出發時間</th><th>抵達時間</th></tr></thead>
+          <tbody><tr><td>101</td><td>08:50</td><td>09:00</td></tr></tbody>
+        </table>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <caption>回程｜彰師大進德校區 → 彰化火車站</caption>
+          <thead><tr><th>車次（路線）</th><th>出發時間</th></tr></thead>
+          <tbody><tr><td>2A（統聯客運側站牌）</td><td>16:40</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-hsr">
+      <p>搭乘臺灣高鐵於<strong>台中（烏日）站</strong>下車，轉乘以下公車路線至「彰化縣原住民生活館」下車，步行約 10 分鐘抵達。</p>
+      <ul class="route-list">
+        <li>彰化客運 6936 台灣好行—鹿港祈福線</li>
+        <li>員林客運 6933 台中—鹿港線</li>
+        <li>員林客運 6933A 台中—鹿港線</li>
+        <li>員林客運 6737〔台中—大城—西港〕線</li>
+        <li>員林客運 6738〔台中—芳苑—王功〕線</li>
+      </ul>
+      <p class="note">以上資訊若有異動，以高鐵車站現場公告為準。</p>
+    </div>
+
+    <div class="tab-panel" id="panel-hsr-train">
+      <p>從臺灣高鐵<strong>台中站</strong>下車，轉搭台鐵至<strong>彰化火車站</strong>下車，再依「火車」頁籤的公車路線搭乘彰化客運／台中客運 101，於彰化縣原住民生活館下車，步行約 10 分鐘抵達；也可搭乘計程車前來。</p>
+    </div>
+
+    <div class="tab-panel" id="panel-car">
+      <div class="card-grid car-grid">
+        <article class="card">
+          <p class="card-icon">🛑</p>
+          <h3>臨停下車</h3>
+          <p class="card-body">可至「正門」旁放學員下車。<strong>切勿停靠校門口</strong>，易開罰單及拖吊！</p>
+        </article>
+        <article class="card">
+          <p class="card-icon">🅿️</p>
+          <h3>陪同入校</h3>
+          <p class="card-body">如需入校，請由「西二門」進入，停放至「地下停車場」（需付費）。</p>
+        </article>
+        <article class="card">
+          <p class="card-icon">🚶</p>
+          <h3>報到動線</h3>
+          <p class="card-body">進入校園後，依循指標步行至「活動中心」，現場將有工作人員引導至報到處。</p>
+        </article>
+      </div>
+
+      <div class="campus-map" aria-hidden="true">
+        <svg viewBox="0 0 480 260" class="map-svg">
+          <ellipse cx="240" cy="130" rx="220" ry="110" fill="none" stroke="#0F8B8D" stroke-width="2" stroke-dasharray="2 6"/>
+          <circle cx="120" cy="190" r="20" fill="none" stroke="#102A43" stroke-width="2.4"/>
+          <text x="120" y="194" text-anchor="middle" class="map-label">地下停車場</text>
+          <circle cx="240" cy="60" r="14" fill="none" stroke="#FFB400" stroke-width="2.4"/>
+          <text x="240" y="44" text-anchor="middle" class="map-label">西二門</text>
+          <circle cx="260" cy="220" r="20" fill="none" stroke="#FF7A30" stroke-width="2.4"/>
+          <text x="260" y="252" text-anchor="middle" class="map-label">進德校區正門</text>
+          <rect x="205" y="120" width="70" height="36" rx="6" fill="#0F8B8D" opacity="0.15" stroke="#0F8B8D" stroke-width="1.5"/>
+          <text x="240" y="142" text-anchor="middle" class="map-label">活動中心</text>
+          <path d="M260 200 L240 160 L240 80" fill="none" stroke="#FF7A30" stroke-width="3" marker-end="url(#arrow)"/>
+          <defs>
+            <marker id="arrow" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="#FF7A30"/>
+            </marker>
+          </defs>
+        </svg>
+        <p class="map-caption">示意圖：紅線為步行報到動線（正門 → 活動中心）</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RULES ============ -->
+  <section id="rules" class="section section-alt">
+    <header class="section-head">
+      <p class="eyebrow">05 · Camp Policy</p>
+      <h2>營隊守則</h2>
+    </header>
+
+    <div class="card-grid">
+      <article class="card">
+        <p class="card-icon">💳</p>
+        <h3>退費政策</h3>
+        <p class="card-body">即日起，不受理因個人因素之退費申請。</p>
+        <p class="card-body"><strong>不可抗力條款：</strong>若因疫情或其他不可控因素導致本營停辦，將依「籌備階段的準備程度」按比例退費。</p>
+      </article>
+
+      <article class="card">
+        <p class="card-icon">📝</p>
+        <h3>請假與離營規定</h3>
+        <p class="card-body">營隊期間如有中途離營需求，請務必依循以下流程：</p>
+        <ol class="step-list">
+          <li>自行下載官方表單「中途離營切結書」。</li>
+          <li>詳細註記提早離開之「日期」與「時段」。</li>
+          <li>於報到日（7/20）當天繳交紙本給工作人員。</li>
+        </ol>
+        <p class="note">表單由主辦單位提供，請向總召／副召信箱索取下載連結。</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section id="contact" class="section">
+    <header class="section-head">
+      <p class="eyebrow">06 · Contact</p>
+      <h2>聯絡窗口</h2>
+      <p class="section-desc">出發前還有任何疑問，歡迎隨時聯繫營隊指揮中心。</p>
+    </header>
+
+    <div class="card-grid">
+      <article class="card">
+        <p class="card-icon">✉️</p>
+        <h3>總召信箱</h3>
+        <p class="card-body placeholder">請於此處填入總召信箱（原通知書未公開顯示）</p>
+      </article>
+      <article class="card">
+        <p class="card-icon">✉️</p>
+        <h3>副召信箱</h3>
+        <p class="card-body placeholder">請於此處填入副召信箱（原通知書未公開顯示）</p>
+      </article>
+    </div>
+
+    <footer class="site-footer">
+      <p>本網站依「2026 彰化師大化學營 行前通知書」內容整理製作，僅供學員與家長行前準備參考，正式規定請以營隊官方公告為準。</p>
+    </footer>
+  </section>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
