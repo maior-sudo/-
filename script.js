@@ -187,6 +187,22 @@
   }
   initChecklist();
 
+  /* ---------- reset progress ---------- */
+  const resetProgressBtn = document.getElementById('resetProgressBtn');
+  if (resetProgressBtn) {
+    resetProgressBtn.addEventListener('click', () => {
+      const confirmed = window.confirm('確定要重置打包進度嗎？所有已勾選的裝備與查詢紀錄都會被清除，此動作無法復原。');
+      if (!confirmed) return;
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch (e) {
+        /* storage unavailable — fail silently */
+      }
+      checkboxes.forEach(cb => { cb.checked = false; });
+      updateProgress();
+    });
+  }
+
   /* ---------- team finder ---------- */
   const nameInput = document.getElementById('nameInput');
   const searchBtn = document.getElementById('searchTeamBtn');
