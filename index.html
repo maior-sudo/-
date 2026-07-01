@@ -26,18 +26,6 @@
   <span></span><span></span><span></span>
 </button>
 
-<!-- ============ EDIT TOOLBAR ============ -->
-<div id="editToolbar" class="edit-toolbar">
-  <button id="editModeBtn" class="edit-btn edit-btn-primary" type="button">
-    <span class="edit-icon" aria-hidden="true">✎</span> 編輯模式
-  </button>
-  <div id="editExtraBtns" class="edit-extra" hidden>
-    <button id="exportBtn" class="edit-btn" type="button">⬇ 下載修改後網頁</button>
-    <button id="resetEditsBtn" class="edit-btn edit-btn-danger" type="button">↺ 還原所有編輯</button>
-  </div>
-</div>
-<div id="editToast" class="edit-toast" role="status" aria-live="polite"></div>
-
 <nav id="sidebar" class="sidebar">
   <div class="brand">
     <span class="brand-mark" aria-hidden="true">
@@ -51,10 +39,11 @@
   <ul class="nav-list">
     <li><a href="#home" class="nav-link active" data-label="01">集合廣場</a></li>
     <li><a href="#schedule" class="nav-link" data-label="02">任務時程</a></li>
-    <li><a href="#checklist" class="nav-link" data-label="03">發芽裝備</a></li>
-    <li><a href="#transport" class="nav-link" data-label="04">遷徙路線</a></li>
-    <li><a href="#rules" class="nav-link" data-label="05">星球守則</a></li>
-    <li><a href="#contact" class="nav-link" data-label="06">通訊頻道</a></li>
+    <li><a href="#teams" class="nav-link" data-label="03">小隊查詢</a></li>
+    <li><a href="#checklist" class="nav-link" data-label="04">發芽裝備</a></li>
+    <li><a href="#transport" class="nav-link" data-label="05">遷徙路線</a></li>
+    <li><a href="#rules" class="nav-link" data-label="06">星球守則</a></li>
+    <li><a href="#contact" class="nav-link" data-label="07">通訊頻道</a></li>
   </ul>
   <div class="sidebar-foot">
     <p>小隊發芽進度</p>
@@ -163,10 +152,29 @@
     </div>
   </section>
 
+  <!-- ============ TEAM FINDER ============ -->
+  <section id="teams" class="section">
+    <header class="section-head">
+      <p class="eyebrow">03 · Squad Finder</p>
+      <h2>小隊分隊查詢</h2>
+      <p class="section-desc">輸入你的報名姓名，找到你的小隊隊輔與同隊夥伴。查詢一次也會計入你的發芽進度喔！</p>
+    </header>
+
+    <div class="finder-card">
+      <div class="finder-input-row">
+        <input type="text" id="nameInput" class="finder-input" placeholder="請輸入你的姓名，例如：王小明" autocomplete="off">
+        <button id="searchTeamBtn" class="btn btn-primary finder-btn" type="button">查詢我的小隊 🔍</button>
+      </div>
+      <p id="finderHint" class="finder-hint">找不到你的名字嗎？姓名須與報名資料完全一致，如有問題請聯繫隊輔或工作人員。</p>
+
+      <div id="teamResult" class="team-result" hidden></div>
+    </div>
+  </section>
+
   <!-- ============ CHECKLIST ============ -->
   <section id="checklist" class="section section-alt">
     <header class="section-head">
-      <p class="eyebrow">03 · Sprout Equipment</p>
+      <p class="eyebrow">04 · Sprout Equipment</p>
       <h2>發芽裝備清單</h2>
       <p class="section-desc">勾選你已經準備好的物品，培育槽會即時顯示你的發芽進度。資料只存在這台裝置裡，不會被其他小隊員看到。</p>
     </header>
@@ -242,7 +250,7 @@
   <!-- ============ TRANSPORT ============ -->
   <section id="transport" class="section">
     <header class="section-head">
-      <p class="eyebrow">04 · Field Migration</p>
+      <p class="eyebrow">05 · Field Migration</p>
       <h2>遷徙路線</h2>
       <p class="section-desc">不管走哪條路線，終點都是「彰化縣原住民生活館」下車，步行約 10 分鐘即可抵達小隊基地，也可直接搭計程車前來喔！</p>
     </header>
@@ -343,7 +351,7 @@
   <!-- ============ RULES ============ -->
   <section id="rules" class="section section-alt">
     <header class="section-head">
-      <p class="eyebrow">05 · Planet Protocols</p>
+      <p class="eyebrow">06 · Planet Protocols</p>
       <h2>星球守則</h2>
       <p class="section-desc">出任務前，每位小隊員都要知道的重要規則。</p>
     </header>
@@ -373,7 +381,7 @@
   <!-- ============ CONTACT ============ -->
   <section id="contact" class="section">
     <header class="section-head">
-      <p class="eyebrow">06 · Contact Base</p>
+      <p class="eyebrow">07 · Contact Base</p>
       <h2>通訊頻道</h2>
       <p class="section-desc">出發前如果訊號中斷、任務有疑問，歡迎隨時呼叫小隊指揮中心。</p>
     </header>
@@ -397,6 +405,18 @@
   </section>
 
 </main>
+
+<!-- ============ ALL TEAMS FLOATING ACTION + MODAL ============ -->
+<button id="viewAllBtn" class="fab" type="button">👀 查看全員名單</button>
+
+<div id="allTeamsModal" class="modal" hidden>
+  <div class="modal-backdrop" id="modalBackdrop"></div>
+  <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button id="modalCloseBtn" class="modal-close" type="button" aria-label="關閉全員名單">✕</button>
+    <h3 id="modalTitle">🌱 全員小隊名單</h3>
+    <div id="allTeamsBody" class="modal-body"></div>
+  </div>
+</div>
 
 <script src="script.js"></script>
 </body>

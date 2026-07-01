@@ -1,5 +1,91 @@
 (() => {
   const STORAGE_KEY = 'chemCamp2026Checklist';
+  const TEAM_LOOKUP_KEY = '__teamLookupDone';
+
+  /* ---------- roster data ---------- */
+  const TEAMS = [
+    {
+      id: 1,
+      leaders: ['林辰翰', '黃子凌', '張愛玲'],
+      members: [
+        { name: '張語呈', school: '崇實高工' },
+        { name: '廖庭毅', school: '中壢高中' },
+        { name: '蕭于祐', school: '鹿寮國中' },
+        { name: '陳家儀', school: '淡水商工' },
+        { name: '許莉筠', school: '正心高中' },
+        { name: '葉庭瑄', school: '六家高中' },
+        { name: '蕭辰瞳', school: '興華高中' }
+      ]
+    },
+    {
+      id: 2,
+      leaders: ['過宥熙', '吳思涵', '謝宇嫻'],
+      members: [
+        { name: '周祐康', school: 'Tomahawk Creek Middle School' },
+        { name: '張登傑', school: '西苑高中' },
+        { name: '林守峻', school: '育達高中' },
+        { name: '洪湘玲', school: '曉明女中' },
+        { name: '陳之善', school: '屏東女中' },
+        { name: '黃盈華', school: '虎尾高中' },
+        { name: '黃莉淇', school: '龍津高中' }
+      ]
+    },
+    {
+      id: 3,
+      leaders: ['吳叡安', '陳沐恩', '王思尹'],
+      members: [
+        { name: '盧孟池', school: '弘文高中' },
+        { name: '吳宇哲', school: '中港高中' },
+        { name: '羅盛昶', school: '台中一中' },
+        { name: '吳文毓', school: '屏東女中' },
+        { name: '王怡媃', school: '斗六高中' },
+        { name: '林芯卉', school: '復興高中' },
+        { name: '李苡榛', school: '興華高中' }
+      ]
+    },
+    {
+      id: 4,
+      leaders: ['林宥丞', '廖彗妏', '許祐瑄'],
+      members: [
+        { name: '許賢量', school: '彰化高中' },
+        { name: '賴威彬', school: '豐原高中' },
+        { name: '何東諺', school: '正心中學' },
+        { name: '許宇彤', school: '精誠中學' },
+        { name: '霜芸淇', school: '大甲高中' },
+        { name: '鍾兆芸', school: '虎尾高中' },
+        { name: '梁瑋玲', school: '育達高中' }
+      ]
+    },
+    {
+      id: 5,
+      leaders: ['江沁宸', '馮怡茹', '曾少君'],
+      members: [
+        { name: '尤允恩', school: '鳳山高中' },
+        { name: '蔡勝馮', school: '彰化高中' },
+        { name: '王王雙', school: '東莞台校' },
+        { name: '盧語欣', school: '小港高中' },
+        { name: '簡子亦', school: '屏東女中' },
+        { name: '沈沛絜', school: '六家高中' },
+        { name: '林昕緹', school: '育達高中' }
+      ]
+    }
+  ];
+
+  function normalize(str) {
+    return (str || '').trim().replace(/\s+/g, '');
+  }
+
+  function findPerson(rawName) {
+    const target = normalize(rawName);
+    if (!target) return null;
+    for (const team of TEAMS) {
+      const leaderMatch = team.leaders.find(n => normalize(n) === target);
+      if (leaderMatch) return { type: 'leader', team, name: leaderMatch };
+      const memberMatch = team.members.find(m => normalize(m.name) === target);
+      if (memberMatch) return { type: 'member', team, name: memberMatch.name };
+    }
+    return null;
+  }
 
   /* ---------- mobile nav toggle ---------- */
   const navToggle = document.getElementById('navToggle');
@@ -28,16 +114,19 @@
   }, { rootMargin: '-40% 0px -50% 0px', threshold: 0 });
   sections.forEach(s => spyObserver.observe(s));
 
-  /* ---------- checklist persistence + beaker fill ---------- */
+  /* ---------- checklist + team-lookup persistence, shared progress ---------- */
   const checkboxes = Array.from(document.querySelectorAll('.check-list input[type="checkbox"]'));
   const liquid = document.getElementById('liquid');
   const progressPercent = document.getElementById('progressPercent');
   const miniFill = document.getElementById('miniProgressFill');
   const miniLabel = document.getElementById('miniProgressLabel');
 
-  // beaker fluid geometry: top y=30, bottom y=260 (height range ~230)
+  // beaker fluid geometry: top y=40, bottom y=254
   const BEAKER_TOP = 40;
   const BEAKER_BOTTOM = 254;
+
+  // Progress = checklist items + 1 virtual item for "found my squad at least once".
+  const TOTAL_ITEMS = checkboxes.length + 1;
 
   function loadState() {
     try {
@@ -57,8 +146,11 @@
   }
 
   function updateProgress() {
-    const total = checkboxes.length;
-    const checked = checkboxes.filter(cb => cb.checked).length;
+    const state = loadState();
+    const checkedCount = checkboxes.filter(cb => cb.checked).length;
+    const lookupDone = !!state[TEAM_LOOKUP_KEY];
+    const total = TOTAL_ITEMS;
+    const checked = checkedCount + (lookupDone ? 1 : 0);
     const pct = total ? Math.round((checked / total) * 100) : 0;
 
     const fillHeight = ((BEAKER_BOTTOM - BEAKER_TOP) * pct) / 100;
@@ -70,7 +162,16 @@
     miniLabel.textContent = `發芽度 ${pct}%`;
   }
 
-  function init() {
+  function markTeamLookupDone() {
+    const s = loadState();
+    if (!s[TEAM_LOOKUP_KEY]) {
+      s[TEAM_LOOKUP_KEY] = true;
+      saveState(s);
+      updateProgress();
+    }
+  }
+
+  function initChecklist() {
     const state = loadState();
     checkboxes.forEach(cb => {
       const key = cb.dataset.item;
@@ -84,149 +185,120 @@
     });
     updateProgress();
   }
-  init();
+  initChecklist();
 
-  /* ================= INLINE EDIT MODE ================= */
-  (() => {
-    const EDIT_STORAGE_KEY = 'chemCamp2026Edits';
+  /* ---------- team finder ---------- */
+  const nameInput = document.getElementById('nameInput');
+  const searchBtn = document.getElementById('searchTeamBtn');
+  const resultBox = document.getElementById('teamResult');
 
-    // Whitelist of text-bearing elements that are safe to edit directly.
-    // Deliberately excludes nav links, tab buttons, checkboxes, and the
-    // toolbar itself so structural/interactive markup can't be broken.
-    const EDITABLE_SELECTOR = [
-      '#home h1', '#home .hero-sub',
-      '.stat-label', '.stat-value',
-      '.eyebrow', '.section-desc',
-      '.card h3', '.card-body', '.card-addr',
-      '.data-list dt', '.data-list dd',
-      '.pin-list li', '.badge',
-      '.warning-note',
-      '.check-group h3', '.check-list span',
-      '.tab-panel p', '.tab-panel li', '.tab-panel .note',
-      'table caption', 'table th', 'table td',
-      '.step-list li',
-      '.site-footer p'
-    ].join(', ');
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
 
-    const editModeBtn = document.getElementById('editModeBtn');
-    const editExtraBtns = document.getElementById('editExtraBtns');
-    const exportBtn = document.getElementById('exportBtn');
-    const resetEditsBtn = document.getElementById('resetEditsBtn');
-    const toast = document.getElementById('editToast');
-    let editMode = false;
-    let toastTimer = null;
+  function renderOwnTeam(found) {
+    const { team, name, type } = found;
+    const leaderChips = team.leaders
+      .map(l => `<span class="chip is-leader">${escapeHtml(l)}</span>`)
+      .join('');
+    const memberChips = team.members
+      .map(m => {
+        const isYou = normalize(m.name) === normalize(name);
+        return `<span class="chip${isYou ? ' is-you' : ''}">${escapeHtml(m.name)}${isYou ? '（你）' : ''}</span>`;
+      })
+      .join('');
+    const roleNote = type === 'leader' ? '（你是這個小隊的隊輔）' : '';
 
-    function showToast(msg) {
-      toast.textContent = msg;
-      toast.classList.add('show');
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
+    resultBox.classList.remove('is-error');
+    resultBox.innerHTML = `
+      <span class="result-badge">🌱 找到了！</span>
+      <h3 class="result-heading">第 ${team.id} 小隊 ${roleNote}</h3>
+      <div class="result-block">
+        <h4>隊輔小隊長</h4>
+        <div class="chip-row">${leaderChips}</div>
+      </div>
+      <div class="result-block">
+        <h4>同隊小隊員</h4>
+        <div class="chip-row">${memberChips}</div>
+      </div>
+    `;
+    resultBox.hidden = false;
+    markTeamLookupDone();
+  }
+
+  function renderNotFound(rawName) {
+    resultBox.classList.add('is-error');
+    resultBox.innerHTML = `
+      <span class="result-badge">🔍 沒有找到</span>
+      <p class="result-error-text">找不到「${escapeHtml(rawName.trim())}」，請確認姓名是否與報名資料完全一致（含正確用字），或聯繫隊輔確認你的分隊。</p>
+    `;
+    resultBox.hidden = false;
+  }
+
+  function runSearch() {
+    const raw = nameInput.value;
+    if (!normalize(raw)) {
+      nameInput.focus();
+      return;
     }
-
-    // Assign a stable, deterministic id to every editable element based on
-    // its DOM order — identical on every page load since content order
-    // doesn't change, so it reliably maps back to saved edits.
-    function tagEditableElements() {
-      const els = Array.from(document.querySelectorAll(EDITABLE_SELECTOR));
-      els.forEach((el, i) => {
-        el.setAttribute('data-editable', '');
-        if (!el.hasAttribute('data-edit-id')) {
-          el.setAttribute('data-edit-id', `edit-${i}`);
-        }
-      });
-      return els;
+    const found = findPerson(raw);
+    if (found) {
+      renderOwnTeam(found);
+    } else {
+      renderNotFound(raw);
     }
+  }
 
-    function loadEdits() {
-      try {
-        const raw = localStorage.getItem(EDIT_STORAGE_KEY);
-        return raw ? JSON.parse(raw) : {};
-      } catch (e) { return {}; }
+  searchBtn.addEventListener('click', runSearch);
+  nameInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') runSearch();
+  });
+
+  /* ---------- all-teams modal ---------- */
+  const viewAllBtn = document.getElementById('viewAllBtn');
+  const modal = document.getElementById('allTeamsModal');
+  const modalBackdrop = document.getElementById('modalBackdrop');
+  const modalCloseBtn = document.getElementById('modalCloseBtn');
+  const allTeamsBody = document.getElementById('allTeamsBody');
+
+  function buildAllTeamsMarkup() {
+    return TEAMS.map(team => {
+      const leaders = team.leaders.map(escapeHtml).join('、');
+      const members = team.members
+        .map(m => `<span class="chip">${escapeHtml(m.name)}<br><small>${escapeHtml(m.school)}</small></span>`)
+        .join('');
+      return `
+        <article class="roster-group">
+          <h4>第 ${team.id} 小隊</h4>
+          <p class="roster-leaders">隊輔：<strong>${leaders}</strong></p>
+          <div class="chip-row">${members}</div>
+        </article>
+      `;
+    }).join('');
+  }
+
+  let modalBuilt = false;
+  function openModal() {
+    if (!modalBuilt) {
+      allTeamsBody.innerHTML = buildAllTeamsMarkup();
+      modalBuilt = true;
     }
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
 
-    function saveEdits(edits) {
-      try { localStorage.setItem(EDIT_STORAGE_KEY, JSON.stringify(edits)); }
-      catch (e) { /* storage unavailable, ignore */ }
-    }
+  function closeModal() {
+    modal.hidden = true;
+    document.body.style.overflow = '';
+  }
 
-    function applySavedEdits(els) {
-      const edits = loadEdits();
-      els.forEach(el => {
-        const id = el.getAttribute('data-edit-id');
-        if (Object.prototype.hasOwnProperty.call(edits, id)) {
-          el.innerHTML = edits[id];
-          el.classList.add('edit-dirty');
-        }
-      });
-    }
-
-    const editableEls = tagEditableElements();
-    applySavedEdits(editableEls);
-
-    function setEditMode(on) {
-      editMode = on;
-      document.body.classList.toggle('edit-mode', on);
-      editModeBtn.classList.toggle('is-active', on);
-      editModeBtn.innerHTML = on
-        ? '<span class="edit-icon" aria-hidden="true">✓</span> 完成編輯'
-        : '<span class="edit-icon" aria-hidden="true">✎</span> 編輯模式';
-      editExtraBtns.hidden = !on;
-      editableEls.forEach(el => {
-        el.setAttribute('contenteditable', on ? 'true' : 'false');
-      });
-      if (on) showToast('編輯模式已開啟：點文字即可修改，會自動儲存在這台裝置上');
-    }
-
-    editModeBtn.addEventListener('click', () => setEditMode(!editMode));
-
-    let saveTimer = null;
-    editableEls.forEach(el => {
-      el.addEventListener('input', () => {
-        el.classList.add('edit-dirty');
-        clearTimeout(saveTimer);
-        saveTimer = setTimeout(() => {
-          const edits = loadEdits();
-          edits[el.getAttribute('data-edit-id')] = el.innerHTML;
-          saveEdits(edits);
-          showToast('已自動儲存');
-        }, 500);
-      });
-    });
-
-    resetEditsBtn.addEventListener('click', () => {
-      if (!confirm('確定要清除所有編輯過的文字，還原成原始內容嗎？')) return;
-      localStorage.removeItem(EDIT_STORAGE_KEY);
-      location.reload();
-    });
-
-    exportBtn.addEventListener('click', () => {
-      const clone = document.documentElement.cloneNode(true);
-
-      // strip transient editing state from the exported copy
-      clone.querySelector('body').classList.remove('edit-mode');
-      clone.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
-      clone.querySelectorAll('.edit-dirty').forEach(el => el.classList.remove('edit-dirty'));
-      const cloneEditBtn = clone.querySelector('#editModeBtn');
-      if (cloneEditBtn) {
-        cloneEditBtn.classList.remove('is-active');
-        cloneEditBtn.innerHTML = '<span class="edit-icon" aria-hidden="true">✎</span> 編輯模式';
-      }
-      const cloneExtra = clone.querySelector('#editExtraBtns');
-      if (cloneExtra) cloneExtra.setAttribute('hidden', '');
-
-      const html = '<!DOCTYPE html>\n' + clone.outerHTML;
-      const blob = new Blob([html], { type: 'text/html' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'index.html';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      showToast('已下載 index.html，請上傳覆蓋 GitHub 上的舊檔案');
-    });
-  })();
+  viewAllBtn.addEventListener('click', openModal);
+  modalBackdrop.addEventListener('click', closeModal);
+  modalCloseBtn.addEventListener('click', closeModal);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !modal.hidden) closeModal();
+  });
 
   /* ---------- transport tabs ---------- */
   const tabs = document.querySelectorAll('.tab');
