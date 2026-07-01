@@ -67,7 +67,7 @@
 
     progressPercent.textContent = `${pct}%`;
     miniFill.style.width = `${pct}%`;
-    miniLabel.textContent = `${pct}% 完成`;
+    miniLabel.textContent = `發芽度 ${pct}%`;
   }
 
   function init() {
@@ -85,6 +85,148 @@
     updateProgress();
   }
   init();
+
+  /* ================= INLINE EDIT MODE ================= */
+  (() => {
+    const EDIT_STORAGE_KEY = 'chemCamp2026Edits';
+
+    // Whitelist of text-bearing elements that are safe to edit directly.
+    // Deliberately excludes nav links, tab buttons, checkboxes, and the
+    // toolbar itself so structural/interactive markup can't be broken.
+    const EDITABLE_SELECTOR = [
+      '#home h1', '#home .hero-sub',
+      '.stat-label', '.stat-value',
+      '.eyebrow', '.section-desc',
+      '.card h3', '.card-body', '.card-addr',
+      '.data-list dt', '.data-list dd',
+      '.pin-list li', '.badge',
+      '.warning-note',
+      '.check-group h3', '.check-list span',
+      '.tab-panel p', '.tab-panel li', '.tab-panel .note',
+      'table caption', 'table th', 'table td',
+      '.step-list li',
+      '.site-footer p'
+    ].join(', ');
+
+    const editModeBtn = document.getElementById('editModeBtn');
+    const editExtraBtns = document.getElementById('editExtraBtns');
+    const exportBtn = document.getElementById('exportBtn');
+    const resetEditsBtn = document.getElementById('resetEditsBtn');
+    const toast = document.getElementById('editToast');
+    let editMode = false;
+    let toastTimer = null;
+
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
+    }
+
+    // Assign a stable, deterministic id to every editable element based on
+    // its DOM order — identical on every page load since content order
+    // doesn't change, so it reliably maps back to saved edits.
+    function tagEditableElements() {
+      const els = Array.from(document.querySelectorAll(EDITABLE_SELECTOR));
+      els.forEach((el, i) => {
+        el.setAttribute('data-editable', '');
+        if (!el.hasAttribute('data-edit-id')) {
+          el.setAttribute('data-edit-id', `edit-${i}`);
+        }
+      });
+      return els;
+    }
+
+    function loadEdits() {
+      try {
+        const raw = localStorage.getItem(EDIT_STORAGE_KEY);
+        return raw ? JSON.parse(raw) : {};
+      } catch (e) { return {}; }
+    }
+
+    function saveEdits(edits) {
+      try { localStorage.setItem(EDIT_STORAGE_KEY, JSON.stringify(edits)); }
+      catch (e) { /* storage unavailable, ignore */ }
+    }
+
+    function applySavedEdits(els) {
+      const edits = loadEdits();
+      els.forEach(el => {
+        const id = el.getAttribute('data-edit-id');
+        if (Object.prototype.hasOwnProperty.call(edits, id)) {
+          el.innerHTML = edits[id];
+          el.classList.add('edit-dirty');
+        }
+      });
+    }
+
+    const editableEls = tagEditableElements();
+    applySavedEdits(editableEls);
+
+    function setEditMode(on) {
+      editMode = on;
+      document.body.classList.toggle('edit-mode', on);
+      editModeBtn.classList.toggle('is-active', on);
+      editModeBtn.innerHTML = on
+        ? '<span class="edit-icon" aria-hidden="true">✓</span> 完成編輯'
+        : '<span class="edit-icon" aria-hidden="true">✎</span> 編輯模式';
+      editExtraBtns.hidden = !on;
+      editableEls.forEach(el => {
+        el.setAttribute('contenteditable', on ? 'true' : 'false');
+      });
+      if (on) showToast('編輯模式已開啟：點文字即可修改，會自動儲存在這台裝置上');
+    }
+
+    editModeBtn.addEventListener('click', () => setEditMode(!editMode));
+
+    let saveTimer = null;
+    editableEls.forEach(el => {
+      el.addEventListener('input', () => {
+        el.classList.add('edit-dirty');
+        clearTimeout(saveTimer);
+        saveTimer = setTimeout(() => {
+          const edits = loadEdits();
+          edits[el.getAttribute('data-edit-id')] = el.innerHTML;
+          saveEdits(edits);
+          showToast('已自動儲存');
+        }, 500);
+      });
+    });
+
+    resetEditsBtn.addEventListener('click', () => {
+      if (!confirm('確定要清除所有編輯過的文字，還原成原始內容嗎？')) return;
+      localStorage.removeItem(EDIT_STORAGE_KEY);
+      location.reload();
+    });
+
+    exportBtn.addEventListener('click', () => {
+      const clone = document.documentElement.cloneNode(true);
+
+      // strip transient editing state from the exported copy
+      clone.querySelector('body').classList.remove('edit-mode');
+      clone.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+      clone.querySelectorAll('.edit-dirty').forEach(el => el.classList.remove('edit-dirty'));
+      const cloneEditBtn = clone.querySelector('#editModeBtn');
+      if (cloneEditBtn) {
+        cloneEditBtn.classList.remove('is-active');
+        cloneEditBtn.innerHTML = '<span class="edit-icon" aria-hidden="true">✎</span> 編輯模式';
+      }
+      const cloneExtra = clone.querySelector('#editExtraBtns');
+      if (cloneExtra) cloneExtra.setAttribute('hidden', '');
+
+      const html = '<!DOCTYPE html>\n' + clone.outerHTML;
+      const blob = new Blob([html], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'index.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('已下載 index.html，請上傳覆蓋 GitHub 上的舊檔案');
+    });
+  })();
 
   /* ---------- transport tabs ---------- */
   const tabs = document.querySelectorAll('.tab');
