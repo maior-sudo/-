@@ -367,7 +367,7 @@ main{position:relative; z-index:1; margin-left:260px;}
 .check-group h3{ font-size:.96rem; margin-bottom:14px; }
 .check-group-warning{ background:#FFF6E4; border-color:#F2D68C; grid-column:1/-1; position:relative; }
 .check-group-warning::before{
-  content:"🌱"; position:absolute; top:-14px; right:18px;
+  content:"⚠️"; position:absolute; top:-14px; right:18px;
   font-size:1.4rem; filter:drop-shadow(0 4px 6px rgba(0,0,0,.15));
 }
 .warning-note{ font-size:.86rem; color:#7A5A1E; margin:0 0 14px; }

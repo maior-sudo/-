@@ -164,7 +164,7 @@
 
     progressPercent.textContent = `${pct}%`;
     miniFill.style.width = `${pct}%`;
-    miniLabel.textContent = `發芽度 ${pct}%`;
+    miniLabel.textContent = `任務進度 ${pct}%`;
 
     if (viewBadgeBtn) viewBadgeBtn.hidden = pct !== 100;
 
@@ -226,7 +226,7 @@
   const resetProgressBtn = document.getElementById('resetProgressBtn');
   if (resetProgressBtn) {
     resetProgressBtn.addEventListener('click', () => {
-      const confirmed = window.confirm('確定要重置打包進度嗎？所有已勾選的裝備與查詢紀錄都會被清除，此動作無法復原。');
+      const confirmed = window.confirm('確定要重置任務進度嗎？所有已勾選的裝備與查詢紀錄都會被清除，此動作無法復原。');
       if (!confirmed) return;
       try {
         localStorage.removeItem(STORAGE_KEY);
@@ -264,7 +264,7 @@
 
     resultBox.classList.remove('is-error');
     resultBox.innerHTML = `
-      <span class="result-badge">🌱 找到了！</span>
+      <span class="result-badge">✅ 找到了！</span>
       <h3 class="result-heading">第 ${team.id} 小隊 ${roleNote}</h3>
       <div class="result-block">
         <h4>隊輔小隊長</h4>
