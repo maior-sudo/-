@@ -1,447 +1,365 @@
-/* ===== Tokens ===== */
-:root{
-  --forest:#1F5C42;
-  --forest-soft:#2E7A56;
-  --leaf:#3FAE6B;
-  --leaf-bright:#57D686;
-  --sun:#FFC94D;
-  --coral:#FF6F4C;
-  --sky:#4FBEE0;
-  --violet:#9C7FE0;
-  --cream:#FBF8EC;
-  --paper:#FFFFFF;
-  --ink:#213327;
-  --ink-soft:#5C6B60;
-  --line:#DCE6D2;
-  --radius:18px;
-  --shadow:0 18px 40px -22px rgba(31,92,66,.22);
-  --font-display:'Space Grotesk', 'Noto Sans TC', sans-serif;
-  --font-body:'Noto Sans TC', sans-serif;
-  --font-mono:'JetBrains Mono', monospace;
-}
+(() => {
+  const STORAGE_KEY = 'chemCamp2026Checklist';
+  const TEAM_LOOKUP_KEY = '__teamLookupDone';
 
-*{box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{
-  margin:0;
-  background:var(--cream);
-  color:var(--ink);
-  font-family:var(--font-body);
-  line-height:1.6;
-  -webkit-font-smoothing:antialiased;
-}
-@media (prefers-reduced-motion: reduce){
-  html{scroll-behavior:auto;}
-  *{animation-duration:.01ms !important; transition-duration:.01ms !important;}
-}
+  /* ---------- roster data ---------- */
+  const TEAMS = [
+    {
+      id: 1,
+      leaders: ['林辰翰', '黃子凌', '張愛玲'],
+      members: [
+        { name: '張語呈', school: '崇實高工' },
+        { name: '廖庭毅', school: '中壢高中' },
+        { name: '蕭于祐', school: '鹿寮國中' },
+        { name: '陳家儀', school: '淡水商工' },
+        { name: '許莉筠', school: '正心高中' },
+        { name: '葉庭瑄', school: '六家高中' },
+        { name: '蕭辰瞳', school: '興華高中' }
+      ]
+    },
+    {
+      id: 2,
+      leaders: ['過宥熙', '吳思涵', '謝宇嫻'],
+      members: [
+        { name: '周祐康', school: 'Tomahawk Creek Middle School' },
+        { name: '張登傑', school: '西苑高中' },
+        { name: '林守峻', school: '育達高中' },
+        { name: '洪湘玲', school: '曉明女中' },
+        { name: '陳之善', school: '屏東女中' },
+        { name: '黃盈華', school: '虎尾高中' },
+        { name: '黃莉淇', school: '龍津高中' }
+      ]
+    },
+    {
+      id: 3,
+      leaders: ['吳叡安', '陳沐恩', '王思尹'],
+      members: [
+        { name: '盧孟池', school: '弘文高中' },
+        { name: '吳宇哲', school: '中港高中' },
+        { name: '羅盛昶', school: '台中一中' },
+        { name: '吳文毓', school: '屏東女中' },
+        { name: '王怡媃', school: '斗六高中' },
+        { name: '林芯卉', school: '復興高中' },
+        { name: '李苡榛', school: '興華高中' }
+      ]
+    },
+    {
+      id: 4,
+      leaders: ['林宥丞', '廖彗妏', '許祐瑄'],
+      members: [
+        { name: '許賢量', school: '彰化高中' },
+        { name: '賴威彬', school: '豐原高中' },
+        { name: '何東諺', school: '正心中學' },
+        { name: '許宇彤', school: '精誠中學' },
+        { name: '霜芸淇', school: '大甲高中' },
+        { name: '鍾兆芸', school: '虎尾高中' },
+        { name: '梁瑋玲', school: '育達高中' }
+      ]
+    },
+    {
+      id: 5,
+      leaders: ['江沁宸', '馮怡茹', '曾少君'],
+      members: [
+        { name: '尤允恩', school: '鳳山高中' },
+        { name: '蔡勝馮', school: '彰化高中' },
+        { name: '王王雙', school: '東莞台校' },
+        { name: '盧語欣', school: '小港高中' },
+        { name: '簡子亦', school: '屏東女中' },
+        { name: '沈沛絜', school: '六家高中' },
+        { name: '林昕緹', school: '育達高中' }
+      ]
+    }
+  ];
 
-a{color:inherit;}
-ul{list-style:none;margin:0;padding:0;}
-h1,h2,h3{font-family:var(--font-display); color:var(--forest); margin:0 0 .4em;}
-
-:focus-visible{outline:3px solid var(--coral); outline-offset:2px; border-radius:4px;}
-
-/* ===== background dot pattern ===== */
-.bg-hex{
-  position:fixed; inset:0; width:100%; height:100%;
-  color:var(--leaf); opacity:.06; z-index:0; pointer-events:none;
-}
-
-/* ===== layout shell ===== */
-main{position:relative; z-index:1; margin-left:260px;}
-@media (max-width:900px){ main{margin-left:0;} }
-
-.sidebar{
-  position:fixed; top:0; left:0; bottom:0; width:260px;
-  background:var(--forest); color:#EAF6EC;
-  display:flex; flex-direction:column;
-  padding:28px 22px; z-index:50;
-  border-right:1px solid rgba(255,255,255,.08);
-}
-@media (max-width:900px){
-  .sidebar{
-    transform:translateX(-100%);
-    transition:transform .35s ease;
-    width:78vw; max-width:300px;
+  function normalize(str) {
+    return (str || '').trim().replace(/\s+/g, '');
   }
-  .sidebar.open{ transform:translateX(0); box-shadow:30px 0 60px rgba(0,0,0,.35); }
-}
 
-.brand{display:flex; align-items:center; gap:12px; margin-bottom:34px;}
-.brand-mark{color:var(--sun); flex:none;}
-.brand-eyebrow{font-family:var(--font-mono); font-size:.68rem; letter-spacing:.12em; color:var(--leaf-bright); margin:0; text-transform:uppercase;}
-.brand-title{font-family:var(--font-display); font-weight:700; font-size:1.05rem; margin:2px 0 0; color:#fff;}
+  function findPerson(rawName) {
+    const target = normalize(rawName);
+    if (!target) return null;
+    for (const team of TEAMS) {
+      const leaderMatch = team.leaders.find(n => normalize(n) === target);
+      if (leaderMatch) return { type: 'leader', team, name: leaderMatch };
+      const memberMatch = team.members.find(m => normalize(m.name) === target);
+      if (memberMatch) return { type: 'member', team, name: memberMatch.name };
+    }
+    return null;
+  }
 
-.nav-list{display:flex; flex-direction:column; gap:4px; flex:1;}
-.nav-link{
-  display:flex; align-items:center; gap:10px;
-  padding:11px 12px; border-radius:12px;
-  font-size:.92rem; color:#CFE6D6; text-decoration:none;
-  transition:background .2s, color .2s;
-}
-.nav-link::before{
-  content:attr(data-label);
-  font-family:var(--font-mono); font-size:.68rem; color:var(--leaf-bright); width:18px;
-}
-.nav-link:hover{ background:rgba(255,255,255,.08); color:#fff; }
-.nav-link.active{ background:var(--leaf); color:#fff; }
-.nav-link.active::before{ color:#fff; }
+  /* ---------- mobile nav toggle ---------- */
+  const navToggle = document.getElementById('navToggle');
+  const sidebar = document.getElementById('sidebar');
+  navToggle.addEventListener('click', () => {
+    const open = sidebar.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      sidebar.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
 
-.sidebar-foot{ margin-top:18px; font-size:.78rem; color:#AFC9B8; }
-.sidebar-foot p{margin:0 0 6px;}
-.mini-progress{ height:8px; border-radius:6px; background:rgba(255,255,255,.14); overflow:hidden; }
-.mini-progress-fill{ height:100%; width:0%; background:linear-gradient(90deg, var(--coral), var(--sun)); transition:width .4s ease; }
-.mini-progress-label{ margin-top:6px !important; font-family:var(--font-mono); }
+  /* ---------- scroll-spy active nav link ---------- */
+  const sections = document.querySelectorAll('main .section');
+  const navLinks = document.querySelectorAll('.nav-link');
+  const spyObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === `#${id}`));
+      }
+    });
+  }, { rootMargin: '-40% 0px -50% 0px', threshold: 0 });
+  sections.forEach(s => spyObserver.observe(s));
 
-.reset-btn{
-  margin-top:12px; width:100%; display:inline-flex; align-items:center; justify-content:center; gap:6px;
-  background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.28); color:#EAF6EC;
-  padding:9px 10px; border-radius:10px; font-size:.76rem; font-family:var(--font-mono);
-  letter-spacing:.02em; cursor:pointer; transition:background .2s ease, transform .15s ease;
-}
-.reset-btn:hover{ background:rgba(255,255,255,.18); transform:translateY(-1px); }
+  /* ---------- checklist + team-lookup persistence, shared progress ---------- */
+  const checkboxes = Array.from(document.querySelectorAll('.check-list input[type="checkbox"]'));
+  const liquid = document.getElementById('liquid');
+  const progressPercent = document.getElementById('progressPercent');
+  const miniFill = document.getElementById('miniProgressFill');
+  const miniLabel = document.getElementById('miniProgressLabel');
 
-.nav-toggle{
-  position:fixed; top:18px; left:18px; z-index:60;
-  width:44px; height:44px; border-radius:12px; border:none;
-  background:var(--forest); display:none; flex-direction:column;
-  align-items:center; justify-content:center; gap:5px; cursor:pointer;
-}
-.nav-toggle span{ width:20px; height:2px; background:#fff; border-radius:2px; }
-@media (max-width:900px){ .nav-toggle{display:flex;} }
+  // beaker fluid geometry: top y=40, bottom y=254
+  const BEAKER_TOP = 40;
+  const BEAKER_BOTTOM = 254;
 
-/* ===== sections ===== */
-.section{ padding:90px 56px; max-width:1180px; }
-@media (max-width:900px){ .section{ padding:80px 22px 60px; } }
-.section-alt{ background:var(--paper); }
+  // Progress = checklist items + 1 virtual item for "found my squad at least once".
+  const TOTAL_ITEMS = checkboxes.length + 1;
 
-.section-head{ max-width:720px; margin-bottom:42px; }
-.eyebrow{ font-family:var(--font-mono); font-size:.74rem; letter-spacing:.1em; color:var(--leaf); text-transform:uppercase; margin:0 0 10px; }
-.section-desc{ color:var(--ink-soft); margin-top:8px; }
+  // Tracks the previous percentage so we only fire the popup once,
+  // right when progress *crosses into* 100% (not on initial page load).
+  let lastPct = null;
 
-/* ===== mission panel (HUD-style section header) ===== */
-.mission-panel{
-  background:var(--paper); border:1.5px solid var(--line); border-radius:var(--radius);
-  box-shadow:var(--shadow); overflow:hidden;
-}
-.mission-bar{
-  display:flex; align-items:center; gap:10px;
-  padding:12px 22px;
-  background:linear-gradient(90deg, rgba(63,174,107,.14), rgba(79,190,224,.10));
-  border-bottom:1px solid var(--line);
-}
-.mission-dot{
-  width:9px; height:9px; border-radius:50%; flex:none;
-  background:var(--leaf); box-shadow:0 0 0 4px rgba(63,174,107,.2);
-  animation:dotPulse 2.4s ease-in-out infinite;
-}
-.mission-tag{
-  font-family:var(--font-mono); font-size:.72rem; letter-spacing:.08em;
-  color:var(--forest); font-weight:700; text-transform:uppercase; flex:1;
-}
-.mission-index{ font-family:var(--font-mono); font-size:.72rem; color:var(--ink-soft); }
-.mission-body{ padding:26px 28px 30px; }
-.mission-body .eyebrow{ display:none; } /* tag in bar already communicates section id */
-.mission-body h2{ margin-top:0; }
-@keyframes dotPulse{ 0%,100%{opacity:1;} 50%{opacity:.35;} }
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) {
+      return {};
+    }
+  }
 
-/* ===== hero ===== */
-.hero{
-  min-height:100vh; display:flex; align-items:center; gap:40px;
-  padding-top:120px; flex-wrap:wrap;
-}
-.hero-inner{ flex:1 1 480px; max-width:620px; }
+  function saveState(state) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+      /* storage unavailable — fail silently, state just won't persist */
+    }
+  }
 
-.hero-status{ margin-bottom:22px; }
-.hero-status-pill{
-  display:inline-flex; align-items:center; gap:8px;
-  border:1.5px solid var(--leaf); color:var(--forest);
-  background:rgba(63,174,107,.10);
-  font-family:var(--font-mono); font-size:.74rem; letter-spacing:.06em;
-  padding:8px 16px; border-radius:999px; font-weight:700; text-transform:uppercase;
-}
-.pulse-dot{
-  width:8px; height:8px; border-radius:50%; background:var(--coral);
-  box-shadow:0 0 0 4px rgba(255,111,76,.2);
-  animation:dotPulse 2.4s ease-in-out infinite;
-}
-.hero-loading-line{
-  font-family:var(--font-mono); font-size:.74rem; color:var(--ink-soft);
-  letter-spacing:.04em; margin:10px 0 0; opacity:.75;
-}
+  function updateProgress() {
+    const state = loadState();
+    const checkedCount = checkboxes.filter(cb => cb.checked).length;
+    const lookupDone = !!state[TEAM_LOOKUP_KEY];
+    const total = TOTAL_ITEMS;
+    const checked = checkedCount + (lookupDone ? 1 : 0);
+    const pct = total ? Math.round((checked / total) * 100) : 0;
 
-.hero h1{ font-size:clamp(2.1rem, 4.4vw, 3.4rem); line-height:1.15; font-weight:700; }
-.accent{ color:var(--coral); }
-.hero-sub{ color:var(--ink-soft); font-size:1.05rem; max-width:520px; margin-bottom:30px; }
+    const fillHeight = ((BEAKER_BOTTOM - BEAKER_TOP) * pct) / 100;
+    liquid.setAttribute('y', BEAKER_BOTTOM - fillHeight);
+    liquid.setAttribute('height', fillHeight);
 
-.hero-stats{ display:grid; grid-template-columns:repeat(3, minmax(150px,1fr)); gap:14px; margin-bottom:30px; }
-@media (max-width:640px){ .hero-stats{ grid-template-columns:1fr; } }
-.stat-card{
-  background:#fff; border:1px solid var(--line); border-radius:14px;
-  padding:14px 18px; min-width:150px; box-shadow:var(--shadow);
-  border-top:3px solid var(--leaf);
-}
-.hero-stats .stat-card:nth-child(2){ border-top-color:var(--sun); }
-.hero-stats .stat-card:nth-child(3){ border-top-color:var(--coral); }
-.stat-label{ margin:0; font-size:.74rem; color:var(--ink-soft); font-family:var(--font-mono); }
-.stat-value{ margin:4px 0 0; font-family:var(--font-display); font-weight:700; color:var(--forest); font-size:1.15rem; }
-.stat-unit{ font-size:.78rem; color:var(--ink-soft); font-weight:500; }
+    progressPercent.textContent = `${pct}%`;
+    miniFill.style.width = `${pct}%`;
+    miniLabel.textContent = `任務進度 ${pct}%`;
 
-.hero-cta{ display:flex; gap:14px; flex-wrap:wrap; }
+    const justReached100 = pct === 100 && lastPct !== null && lastPct !== 100;
+    lastPct = pct;
+    if (justReached100) openCompleteModal();
+  }
 
-/* ===== bracket-cornered mission buttons ===== */
-.btn-mission{
-  position:relative; display:inline-flex; align-items:center; gap:8px;
-  padding:14px 26px; border:1.5px solid var(--forest); border-radius:10px;
-  font-family:var(--font-mono); font-weight:700; letter-spacing:.03em;
-  color:var(--forest); background:rgba(255,255,255,.7);
-  text-decoration:none; font-size:.92rem;
-  transition:transform .15s ease, background .2s ease, color .2s ease, box-shadow .2s ease;
-}
-.btn-mission::before,.btn-mission::after{
-  content:""; position:absolute; width:9px; height:9px; border:2px solid currentColor; opacity:.8;
-}
-.btn-mission::before{ top:-1.5px; left:-1.5px; border-right:none; border-bottom:none; }
-.btn-mission::after{ bottom:-1.5px; right:-1.5px; border-left:none; border-top:none; }
-.btn-mission:hover{ transform:translateY(-2px); }
-.btn-mission-solid{
-  background:var(--leaf); color:#fff; border-color:var(--leaf);
-  box-shadow:0 14px 24px -10px rgba(63,174,107,.55);
-}
+  function markTeamLookupDone() {
+    const s = loadState();
+    if (!s[TEAM_LOOKUP_KEY]) {
+      s[TEAM_LOOKUP_KEY] = true;
+      saveState(s);
+      updateProgress();
+    }
+  }
 
-/* legacy pill buttons (used inside cards/finder) */
-.btn{
-  display:inline-flex; align-items:center; gap:6px;
-  padding:13px 24px; border-radius:999px; font-weight:700;
-  text-decoration:none; font-size:.95rem; border:2px solid transparent;
-  transition:transform .15s ease, box-shadow .15s ease;
-}
-.btn:hover{ transform:translateY(-2px); }
-.btn-primary{ background:var(--coral); color:#fff; box-shadow:0 14px 24px -10px rgba(255,111,76,.55); }
-.btn-ghost{ border-color:var(--forest); color:var(--forest); }
+  function initChecklist() {
+    const state = loadState();
+    checkboxes.forEach(cb => {
+      const key = cb.dataset.item;
+      if (state[key]) cb.checked = true;
+      cb.addEventListener('change', () => {
+        const s = loadState();
+        s[key] = cb.checked;
+        saveState(s);
+        updateProgress();
+      });
+    });
+    updateProgress();
+  }
+  initChecklist();
 
-.hero-art{ flex:1 1 320px; display:flex; justify-content:center; }
-.molecule{ width:min(100%, 380px); }
-.bond-group line{ stroke:var(--forest-soft); stroke-width:2.4; opacity:.6; }
-.atom-group circle{ fill:var(--leaf); }
-.atom-group circle.atom-o{ fill:var(--coral); }
-.atom-group circle.atom-h{ fill:var(--sun); }
-.atom-group circle{
-  animation:pulse 3.2s ease-in-out infinite;
-}
-.atom-group circle:nth-child(odd){ animation-delay:.4s; }
-@keyframes pulse{
-  0%,100%{ transform:scale(1); opacity:1; }
-  50%{ transform:scale(1.18); opacity:.75; }
-}
+  /* ---------- mission-complete popup ---------- */
+  const completeModal = document.getElementById('completeModal');
+  const completeBackdrop = document.getElementById('completeBackdrop');
+  const completeCloseBtn = document.getElementById('completeCloseBtn');
 
-/* ===== cards ===== */
-.card-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:20px; }
-.car-grid{ margin-bottom:32px; }
-.card{
-  background:#fff; border:1px solid var(--line); border-radius:var(--radius);
-  padding:26px; box-shadow:var(--shadow);
-  border-top:4px solid var(--leaf);
-}
-.card-grid .card:nth-child(2){ border-top-color:var(--sky); }
-.card-grid .card:nth-child(3){ border-top-color:var(--sun); }
-.card-grid .card:nth-child(4){ border-top-color:var(--violet); }
-.card-grid .card:nth-child(5){ border-top-color:var(--coral); }
-.card-wide{ grid-column:1/-1; }
-.card-icon{
-  display:inline-flex; align-items:center; justify-content:center;
-  width:42px; height:42px; border-radius:50%;
-  background:rgba(63,174,107,.14);
-  font-size:1.35rem; margin:0 0 12px;
-}
-.card-grid .card:nth-child(2) .card-icon{ background:rgba(79,190,224,.16); }
-.card-grid .card:nth-child(3) .card-icon{ background:rgba(255,201,77,.2); }
-.card-grid .card:nth-child(4) .card-icon{ background:rgba(156,127,224,.16); }
-.card-grid .card:nth-child(5) .card-icon{ background:rgba(255,111,76,.16); }
-.card h3{ font-size:1.05rem; margin-bottom:10px; }
-.card-body{ color:var(--ink-soft); margin:0 0 8px; font-size:.94rem; }
-.card-addr{ font-family:var(--font-mono); font-size:.84rem; color:var(--forest); }
-.card-body.placeholder{ font-style:italic; color:#9C8558; }
+  function openCompleteModal() {
+    if (!completeModal) return;
+    completeModal.hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
 
-.data-list div{ display:flex; justify-content:space-between; gap:12px; padding:8px 0; border-bottom:1px dashed var(--line); font-size:.92rem; }
-.data-list div:last-child{ border-bottom:none; }
-.data-list dt{ color:var(--ink-soft); margin:0; font-weight:500;}
-.data-list dd{ margin:0; font-family:var(--font-mono); color:var(--forest); font-weight:600; text-align:right; }
+  function closeCompleteModal() {
+    if (!completeModal) return;
+    completeModal.hidden = true;
+    document.body.style.overflow = '';
+  }
 
-.pin-list{ display:flex; flex-direction:column; gap:8px; margin-bottom:14px; }
-.pin-list li{ display:flex; gap:8px; font-size:.94rem; color:var(--ink-soft); }
-.pin{ flex:none; }
+  if (completeBackdrop) completeBackdrop.addEventListener('click', closeCompleteModal);
+  if (completeCloseBtn) completeCloseBtn.addEventListener('click', closeCompleteModal);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && completeModal && !completeModal.hidden) closeCompleteModal();
+  });
 
-.badge-row{ display:flex; gap:10px; flex-wrap:wrap; }
-.badge{
-  background:rgba(63,174,107,.14); color:var(--forest); font-size:.78rem;
-  font-weight:700; padding:6px 12px; border-radius:999px;
-}
+  /* ---------- reset progress ---------- */
+  const resetProgressBtn = document.getElementById('resetProgressBtn');
+  if (resetProgressBtn) {
+    resetProgressBtn.addEventListener('click', () => {
+      const confirmed = window.confirm('確定要重置任務進度嗎？所有已勾選的裝備與查詢紀錄都會被清除，此動作無法復原。');
+      if (!confirmed) return;
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch (e) {
+        /* storage unavailable — fail silently */
+      }
+      checkboxes.forEach(cb => { cb.checked = false; });
+      closeCompleteModal();
+      updateProgress();
+    });
+  }
 
-/* ===== checklist ===== */
-.checklist-layout{ display:flex; gap:48px; flex-wrap:wrap; align-items:flex-start; }
-.beaker-wrap{ flex:0 0 200px; text-align:center; position:sticky; top:110px; }
-.beaker{ width:160px; }
-#liquid{ transition:y 1.1s cubic-bezier(.4,1.4,.4,1), height 1.1s cubic-bezier(.4,1.4,.4,1); }
-.progress-percent{ font-family:var(--font-display); font-size:1.8rem; font-weight:700; color:var(--forest); margin:10px 0 0; }
-.progress-caption{ font-size:.8rem; color:var(--ink-soft); margin:2px 0 0; }
+  /* ---------- team finder ---------- */
+  const nameInput = document.getElementById('nameInput');
+  const searchBtn = document.getElementById('searchTeamBtn');
+  const resultBox = document.getElementById('teamResult');
 
-.checklist-cols{ flex:1 1 480px; display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:22px; align-items:start; }
-.check-group{ background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:22px; }
-.check-group h3{ font-size:.96rem; margin-bottom:14px; }
-.check-group-warning{ background:#FFF6E4; border-color:#F2D68C; grid-column:1/-1; position:relative; }
-.check-group-warning::before{
-  content:"⚠️"; position:absolute; top:-14px; right:18px;
-  font-size:1.4rem; filter:drop-shadow(0 4px 6px rgba(0,0,0,.15));
-}
-.warning-note{ font-size:.86rem; color:#7A5A1E; margin:0 0 14px; }
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
 
-.check-list{ display:flex; flex-direction:column; gap:10px; }
-.check-list label{ display:flex; align-items:center; gap:10px; font-size:.92rem; cursor:pointer; color:var(--ink); }
-.check-list input{ width:18px; height:18px; accent-color:var(--leaf); flex:none; }
-.check-list input:checked + span{ text-decoration:line-through; color:var(--ink-soft); }
+  function renderOwnTeam(found) {
+    const { team, name, type } = found;
+    const leaderChips = team.leaders
+      .map(l => `<span class="chip is-leader">${escapeHtml(l)}</span>`)
+      .join('');
+    const memberChips = team.members
+      .map(m => {
+        const isYou = normalize(m.name) === normalize(name);
+        return `<span class="chip${isYou ? ' is-you' : ''}">${escapeHtml(m.name)}${isYou ? '（你）' : ''}</span>`;
+      })
+      .join('');
+    const roleNote = type === 'leader' ? '（你是這個小隊的隊輔）' : '';
 
-/* ===== google map embed ===== */
-.gmap-card{
-  display:block; position:relative; border-radius:var(--radius); overflow:hidden;
-  box-shadow:var(--shadow); margin-bottom:28px; height:300px;
-  border:1px solid var(--line); background:var(--cream);
-}
-.gmap-frame{
-  width:100%; height:100%; border:0; display:block; pointer-events:none;
-}
-.gmap-badge{
-  position:absolute; left:16px; bottom:16px; right:16px;
-  background:var(--forest); color:#fff; font-size:.86rem; font-weight:700;
-  padding:10px 16px; border-radius:12px; box-shadow:0 10px 20px -8px rgba(31,92,66,.6);
-}
-.gmap-card:hover .gmap-badge,
-.gmap-card:focus-visible .gmap-badge{ background:var(--coral); }
-@media (max-width:640px){
-  .gmap-card{ height:230px; }
-  .gmap-badge{ font-size:.78rem; }
-}
+    resultBox.classList.remove('is-error');
+    resultBox.innerHTML = `
+      <span class="result-badge">✅ 找到了！</span>
+      <h3 class="result-heading">第 ${team.id} 小隊 ${roleNote}</h3>
+      <div class="result-block">
+        <h4>隊輔小隊長</h4>
+        <div class="chip-row">${leaderChips}</div>
+      </div>
+      <div class="result-block">
+        <h4>同隊小隊員</h4>
+        <div class="chip-row">${memberChips}</div>
+      </div>
+    `;
+    resultBox.hidden = false;
+    markTeamLookupDone();
+  }
 
-/* ===== transport tabs ===== */
-.tabs{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:26px; }
-.tab{
-  border:1.5px solid var(--line); background:#fff; color:var(--ink-soft);
-  padding:10px 18px; border-radius:999px; font-weight:600; cursor:pointer;
-  font-size:.9rem; font-family:var(--font-body);
-}
-.tab.active{ background:var(--forest); border-color:var(--forest); color:#fff; }
-.tab-panel{ display:none; }
-.tab-panel.active{ display:block; animation:fadeIn .35s ease; }
-@keyframes fadeIn{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;} }
+  function renderNotFound(rawName) {
+    resultBox.classList.add('is-error');
+    resultBox.innerHTML = `
+      <span class="result-badge">🔍 沒有找到</span>
+      <p class="result-error-text">找不到「${escapeHtml(rawName.trim())}」，請確認姓名是否與報名資料完全一致（含正確用字），或聯繫隊輔確認你的分隊。</p>
+    `;
+    resultBox.hidden = false;
+  }
 
-.table-wrap{ overflow-x:auto; margin-bottom:18px; }
-table{ width:100%; border-collapse:collapse; background:#fff; border-radius:12px; overflow:hidden; box-shadow:var(--shadow); }
-caption{ text-align:left; font-weight:700; padding:12px 16px; background:var(--forest); color:#fff; font-size:.85rem; caption-side:top; }
-th,td{ padding:11px 16px; border-bottom:1px solid var(--line); font-size:.9rem; text-align:left; }
-td{ font-family:var(--font-mono); color:var(--forest); }
-th{ color:var(--ink-soft); font-weight:600; }
-tr:last-child td{ border-bottom:none; }
+  const viewAllBtn = document.getElementById('viewAllBtn');
 
-.route-list{ display:flex; flex-direction:column; gap:8px; margin:16px 0; }
-.route-list li{ background:#fff; border:1px solid var(--line); border-radius:10px; padding:10px 16px; font-size:.9rem; }
-.note{ color:var(--ink-soft); font-size:.84rem; font-style:italic; }
+  function runSearch() {
+    const raw = nameInput.value;
+    if (!normalize(raw)) {
+      nameInput.focus();
+      return;
+    }
+    const found = findPerson(raw);
+    if (found) {
+      renderOwnTeam(found);
+    } else {
+      renderNotFound(raw);
+    }
+    viewAllBtn.hidden = false;
+  }
 
-.campus-map{ background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:20px; text-align:center; box-shadow:var(--shadow); }
-.map-svg{ width:100%; max-width:480px; height:auto; border-radius:12px; display:inline-block; }
-.map-caption{ font-size:.8rem; color:var(--ink-soft); margin-top:8px; }
+  searchBtn.addEventListener('click', runSearch);
+  nameInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') runSearch();
+  });
 
-/* ===== rules ===== */
-.step-list{ margin:0; padding-left:20px; color:var(--ink-soft); font-size:.92rem; display:flex; flex-direction:column; gap:6px; }
+  /* ---------- all-teams modal ---------- */
+  const modal = document.getElementById('allTeamsModal');
+  const modalBackdrop = document.getElementById('modalBackdrop');
+  const modalCloseBtn = document.getElementById('modalCloseBtn');
+  const allTeamsBody = document.getElementById('allTeamsBody');
 
-/* ===== team finder ===== */
-.finder-card{
-  background:#fff; border:1px solid var(--line); border-radius:var(--radius);
-  padding:28px; box-shadow:var(--shadow); max-width:720px;
-}
-.finder-input-row{ display:flex; gap:12px; flex-wrap:wrap; }
-.finder-input{
-  flex:1 1 260px; padding:13px 18px; border-radius:999px;
-  border:1.5px solid var(--line); font-size:.96rem; font-family:var(--font-body);
-  color:var(--ink); background:var(--cream);
-}
-.finder-input:focus{ outline:none; border-color:var(--leaf); background:#fff; }
-.finder-btn{ flex:0 0 auto; border:none; cursor:pointer; font-family:var(--font-body); }
-.finder-hint{ margin:12px 0 0; font-size:.82rem; color:var(--ink-soft); }
+  function buildAllTeamsMarkup() {
+    return TEAMS.map(team => {
+      const leaders = team.leaders.map(escapeHtml).join('、');
+      const members = team.members
+        .map(m => `<span class="chip">${escapeHtml(m.name)}<br><small>${escapeHtml(m.school)}</small></span>`)
+        .join('');
+      return `
+        <article class="roster-group">
+          <h4>第 ${team.id} 小隊</h4>
+          <p class="roster-leaders">隊輔：<strong>${leaders}</strong></p>
+          <div class="chip-row">${members}</div>
+        </article>
+      `;
+    }).join('');
+  }
 
-.team-result{ margin-top:24px; border-top:1px dashed var(--line); padding-top:22px; }
-.team-result.is-error .result-badge{ background:rgba(255,111,76,.14); color:#C4491D; }
-.result-badge{
-  display:inline-flex; align-items:center; gap:6px;
-  background:rgba(63,174,107,.14); color:var(--forest);
-  font-weight:700; font-size:.82rem; padding:6px 14px; border-radius:999px; margin-bottom:14px;
-}
-.result-heading{ font-family:var(--font-display); font-size:1.2rem; color:var(--forest); margin:0 0 14px; }
-.result-block{ margin-bottom:16px; }
-.result-block h4{ font-size:.86rem; color:var(--ink-soft); margin:0 0 8px; font-weight:700; }
-.chip-row{ display:flex; flex-wrap:wrap; gap:8px; }
-.chip{
-  background:var(--cream); border:1px solid var(--line); border-radius:999px;
-  padding:6px 14px; font-size:.88rem; color:var(--ink);
-}
-.chip.is-leader{ background:rgba(255,201,77,.24); border-color:#EFC868; font-weight:700; }
-.chip.is-you{ background:var(--coral); border-color:var(--coral); color:#fff; font-weight:700; }
-.result-error-text{ color:#C4491D; font-weight:600; }
+  let modalBuilt = false;
+  function openModal() {
+    if (!modalBuilt) {
+      allTeamsBody.innerHTML = buildAllTeamsMarkup();
+      modalBuilt = true;
+    }
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
 
-/* ===== floating action button (scoped to team-finder section) ===== */
-.finder-footer{ display:flex; justify-content:flex-end; margin-top:20px; }
-.fab{
-  background:var(--forest); color:#fff; border:none; cursor:pointer;
-  padding:13px 20px; border-radius:999px; font-weight:700; font-size:.88rem;
-  font-family:var(--font-body); box-shadow:0 16px 30px -12px rgba(31,92,66,.55);
-  transition:transform .15s ease, opacity .2s ease;
-}
-.fab:hover{ transform:translateY(-2px); }
-.fab-inline{
-  animation:fabIn .35s ease;
-}
-@keyframes fabIn{
-  from{ opacity:0; transform:translateY(8px); }
-  to{ opacity:1; transform:translateY(0); }
-}
-@media (max-width:640px){
-  .fab{ padding:11px 16px; font-size:.82rem; }
-  .finder-footer{ justify-content:center; }
-}
+  function closeModal() {
+    modal.hidden = true;
+    document.body.style.overflow = '';
+  }
 
-/* ===== modal ===== */
-.modal{ position:fixed; inset:0; z-index:90; display:flex; align-items:center; justify-content:center; padding:20px; }
-.modal[hidden]{ display:none; }
-.modal-backdrop{ position:absolute; inset:0; background:rgba(31,92,66,.5); backdrop-filter:blur(2px); }
-.modal-panel{
-  position:relative; background:var(--cream); border-radius:20px;
-  max-width:760px; width:100%; max-height:82vh; overflow-y:auto;
-  padding:32px; box-shadow:0 30px 60px -20px rgba(0,0,0,.35);
-}
-.modal-panel h3{ margin-bottom:18px; }
-.modal-close{
-  position:absolute; top:18px; right:18px; width:36px; height:36px; border-radius:50%;
-  border:1px solid var(--line); background:#fff; cursor:pointer; font-size:1rem; color:var(--ink-soft);
-}
-.modal-body{ display:flex; flex-direction:column; gap:18px; }
-.roster-group{
-  border:1px solid var(--line); border-radius:14px; padding:18px; background:#fff;
-}
-.roster-group h4{
-  font-family:var(--font-display); color:var(--forest); margin:0 0 10px; font-size:1.02rem;
-}
-.roster-leaders{ font-size:.85rem; color:var(--ink-soft); margin:0 0 10px; }
-.roster-leaders strong{ color:var(--forest); }
+  viewAllBtn.addEventListener('click', openModal);
+  modalBackdrop.addEventListener('click', closeModal);
+  modalCloseBtn.addEventListener('click', closeModal);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !modal.hidden) closeModal();
+  });
 
-/* ===== social links (contact section) ===== */
-.social-links{ display:flex; gap:12px; flex-wrap:wrap; margin-top:24px; padding-top:24px; border-top:1px dashed var(--line); }
-.social-pill{
-  display:inline-flex; align-items:center; gap:8px;
-  background:#fff; border:1.5px solid var(--line); color:var(--forest);
-  padding:10px 20px; border-radius:999px; font-weight:700; font-size:.9rem;
-  text-decoration:none; box-shadow:var(--shadow);
-  transition:transform .15s ease, border-color .2s ease;
-}
-.social-pill:hover{ transform:translateY(-2px); border-color:var(--leaf); }
-
-/* ===== footer ===== */
-.site-footer{ margin-top:60px; padding-top:24px; border-top:1px solid var(--line); color:var(--ink-soft); font-size:.82rem; }
+  /* ---------- transport tabs ---------- */
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.tab-panel');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
+      panels.forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+      document.getElementById(`panel-${tab.dataset.tab}`).classList.add('active');
+    });
+  });
+})();
