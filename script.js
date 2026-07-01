@@ -1,485 +1,365 @@
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2026 彰化師大化學營｜闖關任務行前準備手冊</title>
-<meta name="description" content="任務召集令：2026 彰化師大化學營行前準備手冊 — 任務時程、裝備清單、集合路線與注意事項。">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
+(() => {
+  const STORAGE_KEY = 'chemCamp2026Checklist';
+  const TEAM_LOOKUP_KEY = '__teamLookupDone';
 
-<!-- decorative dot field -->
-<svg class="bg-hex" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <pattern id="hexPattern" width="56" height="64" patternUnits="userSpaceOnUse" patternTransform="scale(1)">
-      <path d="M28 0 L56 16 L56 48 L28 64 L0 48 L0 16 Z" fill="none" stroke="currentColor" stroke-width="1"/>
-    </pattern>
-  </defs>
-  <rect width="100%" height="100%" fill="url(#hexPattern)"/>
-</svg>
+  /* ---------- roster data ---------- */
+  const TEAMS = [
+    {
+      id: 1,
+      leaders: ['林辰翰', '黃子凌', '張愛玲'],
+      members: [
+        { name: '張語呈', school: '崇實高工' },
+        { name: '廖庭毅', school: '中壢高中' },
+        { name: '蕭于祐', school: '鹿寮國中' },
+        { name: '陳家儀', school: '淡水商工' },
+        { name: '許莉筠', school: '正心高中' },
+        { name: '葉庭瑄', school: '六家高中' },
+        { name: '蕭辰瞳', school: '興華高中' }
+      ]
+    },
+    {
+      id: 2,
+      leaders: ['過宥熙', '吳思涵', '謝宇嫻'],
+      members: [
+        { name: '周祐康', school: 'Tomahawk Creek Middle School' },
+        { name: '張登傑', school: '西苑高中' },
+        { name: '林守峻', school: '育達高中' },
+        { name: '洪湘玲', school: '曉明女中' },
+        { name: '陳之善', school: '屏東女中' },
+        { name: '黃盈華', school: '虎尾高中' },
+        { name: '黃莉淇', school: '龍津高中' }
+      ]
+    },
+    {
+      id: 3,
+      leaders: ['吳叡安', '陳沐恩', '王思尹'],
+      members: [
+        { name: '盧孟池', school: '弘文高中' },
+        { name: '吳宇哲', school: '中港高中' },
+        { name: '羅盛昶', school: '台中一中' },
+        { name: '吳文毓', school: '屏東女中' },
+        { name: '王怡媃', school: '斗六高中' },
+        { name: '林芯卉', school: '復興高中' },
+        { name: '李苡榛', school: '興華高中' }
+      ]
+    },
+    {
+      id: 4,
+      leaders: ['林宥丞', '廖彗妏', '許祐瑄'],
+      members: [
+        { name: '許賢量', school: '彰化高中' },
+        { name: '賴威彬', school: '豐原高中' },
+        { name: '何東諺', school: '正心中學' },
+        { name: '許宇彤', school: '精誠中學' },
+        { name: '霜芸淇', school: '大甲高中' },
+        { name: '鍾兆芸', school: '虎尾高中' },
+        { name: '梁瑋玲', school: '育達高中' }
+      ]
+    },
+    {
+      id: 5,
+      leaders: ['江沁宸', '馮怡茹', '曾少君'],
+      members: [
+        { name: '尤允恩', school: '鳳山高中' },
+        { name: '蔡勝馮', school: '彰化高中' },
+        { name: '王王雙', school: '東莞台校' },
+        { name: '盧語欣', school: '小港高中' },
+        { name: '簡子亦', school: '屏東女中' },
+        { name: '沈沛絜', school: '六家高中' },
+        { name: '林昕緹', school: '育達高中' }
+      ]
+    }
+  ];
 
-<button id="navToggle" class="nav-toggle" aria-label="開啟選單" aria-expanded="false" aria-controls="sidebar">
-  <span></span><span></span><span></span>
-</button>
+  function normalize(str) {
+    return (str || '').trim().replace(/\s+/g, '');
+  }
 
-<nav id="sidebar" class="sidebar">
-  <div class="brand">
-    <span class="brand-mark" aria-hidden="true">
-      <svg viewBox="0 0 40 40" width="34" height="34"><path d="M16 4h8v8l8 16a4 4 0 0 1-3.6 5.8H11.6A4 4 0 0 1 8 28l8-16V4z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><line x1="13" y1="14" x2="27" y2="14" stroke="currentColor" stroke-width="2.4"/></svg>
-    </span>
-    <div>
-      <p class="brand-eyebrow">NCUE · 2026 化學闖關營</p>
-      <p class="brand-title">任務指揮站</p>
-    </div>
-  </div>
-  <ul class="nav-list">
-    <li><a href="#home" class="nav-link active" data-label="01">集合廣場</a></li>
-    <li><a href="#schedule" class="nav-link" data-label="02">任務時程</a></li>
-    <li><a href="#teams" class="nav-link" data-label="03">小隊查詢</a></li>
-    <li><a href="#checklist" class="nav-link" data-label="04">任務裝備</a></li>
-    <li><a href="#transport" class="nav-link" data-label="05">交通路線</a></li>
-    <li><a href="#rules" class="nav-link" data-label="06">任務守則</a></li>
-    <li><a href="#contact" class="nav-link" data-label="07">通訊頻道</a></li>
-  </ul>
-  <div class="sidebar-foot">
-    <p>任務完成進度</p>
-    <div class="mini-progress"><div id="miniProgressFill" class="mini-progress-fill"></div></div>
-    <p id="miniProgressLabel" class="mini-progress-label">任務進度 0%</p>
-    <button id="resetProgressBtn" class="reset-btn" type="button">↺ 重置任務進度</button>
-  </div>
-</nav>
+  function findPerson(rawName) {
+    const target = normalize(rawName);
+    if (!target) return null;
+    for (const team of TEAMS) {
+      const leaderMatch = team.leaders.find(n => normalize(n) === target);
+      if (leaderMatch) return { type: 'leader', team, name: leaderMatch };
+      const memberMatch = team.members.find(m => normalize(m.name) === target);
+      if (memberMatch) return { type: 'member', team, name: memberMatch.name };
+    }
+    return null;
+  }
 
-<main>
+  /* ---------- mobile nav toggle ---------- */
+  const navToggle = document.getElementById('navToggle');
+  const sidebar = document.getElementById('sidebar');
+  navToggle.addEventListener('click', () => {
+    const open = sidebar.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      sidebar.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
 
-  <!-- ============ HERO / 首頁 ============ -->
-  <section id="home" class="section hero">
-    <div class="hero-inner">
+  /* ---------- scroll-spy active nav link ---------- */
+  const sections = document.querySelectorAll('main .section');
+  const navLinks = document.querySelectorAll('.nav-link');
+  const spyObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === `#${id}`));
+      }
+    });
+  }, { rootMargin: '-40% 0px -50% 0px', threshold: 0 });
+  sections.forEach(s => spyObserver.observe(s));
 
-      <div class="hero-status">
-        <span class="hero-status-pill"><span class="pulse-dot"></span> 任務簡報 // ADVENTURE BRIEFING</span>
-        <p class="hero-loading-line">系統：正在載入行前準備資料 ...</p>
+  /* ---------- checklist + team-lookup persistence, shared progress ---------- */
+  const checkboxes = Array.from(document.querySelectorAll('.check-list input[type="checkbox"]'));
+  const liquid = document.getElementById('liquid');
+  const progressPercent = document.getElementById('progressPercent');
+  const miniFill = document.getElementById('miniProgressFill');
+  const miniLabel = document.getElementById('miniProgressLabel');
+
+  // beaker fluid geometry: top y=40, bottom y=254
+  const BEAKER_TOP = 40;
+  const BEAKER_BOTTOM = 254;
+
+  // Progress = checklist items + 1 virtual item for "found my squad at least once".
+  const TOTAL_ITEMS = checkboxes.length + 1;
+
+  // Tracks the previous percentage so we only fire the popup once,
+  // right when progress *crosses into* 100% (not on initial page load).
+  let lastPct = null;
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function saveState(state) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+      /* storage unavailable — fail silently, state just won't persist */
+    }
+  }
+
+  function updateProgress() {
+    const state = loadState();
+    const checkedCount = checkboxes.filter(cb => cb.checked).length;
+    const lookupDone = !!state[TEAM_LOOKUP_KEY];
+    const total = TOTAL_ITEMS;
+    const checked = checkedCount + (lookupDone ? 1 : 0);
+    const pct = total ? Math.round((checked / total) * 100) : 0;
+
+    const fillHeight = ((BEAKER_BOTTOM - BEAKER_TOP) * pct) / 100;
+    liquid.setAttribute('y', BEAKER_BOTTOM - fillHeight);
+    liquid.setAttribute('height', fillHeight);
+
+    progressPercent.textContent = `${pct}%`;
+    miniFill.style.width = `${pct}%`;
+    miniLabel.textContent = `任務進度 ${pct}%`;
+
+    const justReached100 = pct === 100 && lastPct !== null && lastPct !== 100;
+    lastPct = pct;
+    if (justReached100) openCompleteModal();
+  }
+
+  function markTeamLookupDone() {
+    const s = loadState();
+    if (!s[TEAM_LOOKUP_KEY]) {
+      s[TEAM_LOOKUP_KEY] = true;
+      saveState(s);
+      updateProgress();
+    }
+  }
+
+  function initChecklist() {
+    const state = loadState();
+    checkboxes.forEach(cb => {
+      const key = cb.dataset.item;
+      if (state[key]) cb.checked = true;
+      cb.addEventListener('change', () => {
+        const s = loadState();
+        s[key] = cb.checked;
+        saveState(s);
+        updateProgress();
+      });
+    });
+    updateProgress();
+  }
+  initChecklist();
+
+  /* ---------- mission-complete popup ---------- */
+  const completeModal = document.getElementById('completeModal');
+  const completeBackdrop = document.getElementById('completeBackdrop');
+  const completeCloseBtn = document.getElementById('completeCloseBtn');
+
+  function openCompleteModal() {
+    if (!completeModal) return;
+    completeModal.hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeCompleteModal() {
+    if (!completeModal) return;
+    completeModal.hidden = true;
+    document.body.style.overflow = '';
+  }
+
+  if (completeBackdrop) completeBackdrop.addEventListener('click', closeCompleteModal);
+  if (completeCloseBtn) completeCloseBtn.addEventListener('click', closeCompleteModal);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && completeModal && !completeModal.hidden) closeCompleteModal();
+  });
+
+  /* ---------- reset progress ---------- */
+  const resetProgressBtn = document.getElementById('resetProgressBtn');
+  if (resetProgressBtn) {
+    resetProgressBtn.addEventListener('click', () => {
+      const confirmed = window.confirm('確定要重置任務進度嗎？所有已勾選的裝備與查詢紀錄都會被清除，此動作無法復原。');
+      if (!confirmed) return;
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch (e) {
+        /* storage unavailable — fail silently */
+      }
+      checkboxes.forEach(cb => { cb.checked = false; });
+      closeCompleteModal();
+      updateProgress();
+    });
+  }
+
+  /* ---------- team finder ---------- */
+  const nameInput = document.getElementById('nameInput');
+  const searchBtn = document.getElementById('searchTeamBtn');
+  const resultBox = document.getElementById('teamResult');
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function renderOwnTeam(found) {
+    const { team, name, type } = found;
+    const leaderChips = team.leaders
+      .map(l => `<span class="chip is-leader">${escapeHtml(l)}</span>`)
+      .join('');
+    const memberChips = team.members
+      .map(m => {
+        const isYou = normalize(m.name) === normalize(name);
+        return `<span class="chip${isYou ? ' is-you' : ''}">${escapeHtml(m.name)}${isYou ? '（你）' : ''}</span>`;
+      })
+      .join('');
+    const roleNote = type === 'leader' ? '（你是這個小隊的隊輔）' : '';
+
+    resultBox.classList.remove('is-error');
+    resultBox.innerHTML = `
+      <span class="result-badge">✅ 找到了！</span>
+      <h3 class="result-heading">第 ${team.id} 小隊 ${roleNote}</h3>
+      <div class="result-block">
+        <h4>隊輔小隊長</h4>
+        <div class="chip-row">${leaderChips}</div>
       </div>
-
-      <p class="eyebrow">行前準備手冊 · 4 天 3 夜任務</p>
-      <h1>任務隊員<br><span class="accent">招募中</span> 🧪</h1>
-      <p class="hero-sub">準備好挑戰這次的化學任務了嗎？這次營隊我們將分工成不同專長的任務小隊，闖過各種化學關卡！從色彩斑斕的顏色反應，到充滿驚奇的物質變化，這場任務絕對讓你收穫滿滿。捲動瀏覽任務全貌 — 時間、地點、該帶什麼、怎麼前往基地。</p>
-
-      <div class="hero-stats">
-        <div class="stat-card">
-          <p class="stat-label">任務週期</p>
-          <p class="stat-value">7/20<span class="stat-unit">（四）</span> – 7/23<span class="stat-unit">（日）</span></p>
-        </div>
-        <div class="stat-card">
-          <p class="stat-label">小隊集合</p>
-          <p class="stat-value">09:20<span class="stat-unit">–10:00</span></p>
-        </div>
-        <div class="stat-card">
-          <p class="stat-label">任務結束解散</p>
-          <p class="stat-value">7/23 16:30</p>
-        </div>
+      <div class="result-block">
+        <h4>同隊小隊員</h4>
+        <div class="chip-row">${memberChips}</div>
       </div>
+    `;
+    resultBox.hidden = false;
+    markTeamLookupDone();
+  }
 
-      <div class="hero-cta">
-        <a href="#teams" class="btn-mission btn-mission-solid">開始行前準備 START PREP →</a>
-        <a href="#transport" class="btn-mission">查交通路線</a>
-      </div>
-    </div>
+  function renderNotFound(rawName) {
+    resultBox.classList.add('is-error');
+    resultBox.innerHTML = `
+      <span class="result-badge">🔍 沒有找到</span>
+      <p class="result-error-text">找不到「${escapeHtml(rawName.trim())}」，請確認姓名是否與報名資料完全一致（含正確用字），或聯繫隊輔確認你的分隊。</p>
+    `;
+    resultBox.hidden = false;
+  }
 
-    <!-- signature element: animated molecule -->
-    <div class="hero-art" aria-hidden="true">
-      <svg viewBox="0 0 360 360" class="molecule">
-        <g class="bond-group">
-          <line x1="180" y1="60"  x2="260" y2="105"/>
-          <line x1="260" y1="105" x2="260" y2="195"/>
-          <line x1="260" y1="195" x2="180" y2="240"/>
-          <line x1="180" y1="240" x2="100" y2="195"/>
-          <line x1="100" y1="195" x2="100" y2="105"/>
-          <line x1="100" y1="105" x2="180" y2="60"/>
-          <line x1="180" y1="240" x2="180" y2="300"/>
-          <line x1="100" y1="105" x2="40"  y2="70"/>
-          <line x1="260" y1="105" x2="320" y2="70"/>
-        </g>
-        <g class="atom-group">
-          <circle cx="180" cy="60"  r="9"/>
-          <circle cx="260" cy="105" r="9"/>
-          <circle cx="260" cy="195" r="9"/>
-          <circle cx="180" cy="240" r="11" class="atom-o"/>
-          <circle cx="100" cy="195" r="9"/>
-          <circle cx="100" cy="105" r="9"/>
-          <circle cx="180" cy="300" r="7" class="atom-h"/>
-          <circle cx="40"  cy="70"  r="7" class="atom-h"/>
-          <circle cx="320" cy="70"  r="7" class="atom-h"/>
-        </g>
-      </svg>
-    </div>
-  </section>
+  const viewAllBtn = document.getElementById('viewAllBtn');
 
-  <!-- ============ SCHEDULE ============ -->
-  <section id="schedule" class="section">
-    <header class="section-head mission-panel">
-      <div class="mission-bar">
-        <span class="mission-dot" aria-hidden="true"></span>
-        <span class="mission-tag">SYSTEM://SCHEDULE</span>
-        <span class="mission-index">02 / 07</span>
-      </div>
-      <div class="mission-body">
-        <p class="eyebrow">任務時程與基地</p>
-        <h2>任務時程與基地</h2>
-        <p class="section-desc">全程都有隊輔小隊長帶隊闖關，也幫每位任務隊員都投保了專屬保險，安心出任務。</p>
-      </div>
-    </header>
+  function runSearch() {
+    const raw = nameInput.value;
+    if (!normalize(raw)) {
+      nameInput.focus();
+      return;
+    }
+    const found = findPerson(raw);
+    if (found) {
+      renderOwnTeam(found);
+    } else {
+      renderNotFound(raw);
+    }
+    viewAllBtn.hidden = false;
+  }
 
-    <div class="card-grid">
-      <article class="card">
-        <p class="card-icon" aria-hidden="true">🗓️</p>
-        <h3>行動時程</h3>
-        <dl class="data-list">
-          <div><dt>啟動集合</dt><dd>115/7/20（四）09:20–10:00</dd></div>
-          <div><dt>任務結束解散</dt><dd>115/7/23（日）16:30</dd></div>
-          <div><dt>任務總長</dt><dd>四天三夜</dd></div>
-        </dl>
-      </article>
+  searchBtn.addEventListener('click', runSearch);
+  nameInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') runSearch();
+  });
 
-      <article class="card">
-        <p class="card-icon" aria-hidden="true">🏛️</p>
-        <h3>小隊基地</h3>
-        <p class="card-body">彰化師大 進德校區（過夜休息與主任務基地）</p>
-        <p class="card-addr">500 彰化縣彰化市進德路 1 號</p>
-      </article>
+  /* ---------- all-teams modal ---------- */
+  const modal = document.getElementById('allTeamsModal');
+  const modalBackdrop = document.getElementById('modalBackdrop');
+  const modalCloseBtn = document.getElementById('modalCloseBtn');
+  const allTeamsBody = document.getElementById('allTeamsBody');
 
-      <article class="card card-wide">
-        <p class="card-icon" aria-hidden="true">🧪</p>
-        <h3>野外任務 Field Missions</h3>
-        <ul class="pin-list">
-          <li><span class="pin">📍</span>廣源良絲瓜水體驗工廠 — 506 彰化縣福興鄉福工路 13-1 號</li>
-          <li><span class="pin">📍</span>台塑生醫健康悠活館 — 500 彰化縣彰化市中山路三段 359 號</li>
-        </ul>
-        <div class="badge-row">
-          <span class="badge">✔ 全程隊輔小隊長陪同</span>
-          <span class="badge">✔ 含專屬保險</span>
-        </div>
-      </article>
-    </div>
-  </section>
-
-  <!-- ============ TEAM FINDER ============ -->
-  <section id="teams" class="section">
-    <header class="section-head mission-panel">
-      <div class="mission-bar">
-        <span class="mission-dot" aria-hidden="true"></span>
-        <span class="mission-tag">SYSTEM://SQUAD_FINDER</span>
-        <span class="mission-index">03 / 07</span>
-      </div>
-      <div class="mission-body">
-        <p class="eyebrow">小隊分隊查詢</p>
-        <h2>小隊分隊查詢</h2>
-        <p class="section-desc">輸入你的報名姓名，找到你的小隊隊輔與同隊夥伴。查詢一次也會計入你的任務進度喔！</p>
-      </div>
-    </header>
-
-    <div class="finder-card">
-      <div class="finder-input-row">
-        <input type="text" id="nameInput" class="finder-input" placeholder="請輸入你的姓名，例如：王小明" autocomplete="off">
-        <button id="searchTeamBtn" class="btn btn-primary finder-btn" type="button">查詢我的小隊 🔍</button>
-      </div>
-      <p id="finderHint" class="finder-hint">找不到你的名字嗎？姓名須與報名資料完全一致，如有問題請聯繫隊輔或工作人員。</p>
-
-      <div id="teamResult" class="team-result" hidden></div>
-
-      <div class="finder-footer">
-        <button id="viewAllBtn" class="fab fab-inline" type="button" hidden>👀 查看全員名單</button>
-      </div>
-    </div>
-
-    <div id="allTeamsModal" class="modal" hidden>
-      <div class="modal-backdrop" id="modalBackdrop"></div>
-      <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-        <button id="modalCloseBtn" class="modal-close" type="button" aria-label="關閉全員名單">✕</button>
-        <h3 id="modalTitle">📋 全員小隊名單</h3>
-        <div id="allTeamsBody" class="modal-body"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ CHECKLIST ============ -->
-  <section id="checklist" class="section section-alt">
-    <header class="section-head mission-panel">
-      <div class="mission-bar">
-        <span class="mission-dot" aria-hidden="true"></span>
-        <span class="mission-tag">SYSTEM://EQUIPMENT</span>
-        <span class="mission-index">04 / 07</span>
-      </div>
-      <div class="mission-body">
-        <p class="eyebrow">任務裝備清單</p>
-        <h2>任務裝備清單</h2>
-        <p class="section-desc">勾選你已經準備好的物品，進度槽會即時顯示你的任務進度。資料只存在這台裝置裡，不會被其他小隊員看到。</p>
-      </div>
-    </header>
-
-    <div class="checklist-layout">
-      <div class="beaker-wrap" aria-hidden="true">
-        <svg viewBox="0 0 200 260" class="beaker">
-          <defs>
-            <clipPath id="liquidClip">
-              <path d="M40 30 L40 90 L8 230 a14 14 0 0 0 14 24 L178 254 a14 14 0 0 0 14-24 L160 90 L160 30 Z"/>
-            </clipPath>
-          </defs>
-          <rect id="liquid" x="0" y="260" width="200" height="0" fill="url(#liquidGradient)" clip-path="url(#liquidClip)"/>
-          <linearGradient id="liquidGradient" x1="0" y1="1" x2="0" y2="0">
-            <stop offset="0%" stop-color="#FF6F4C"/>
-            <stop offset="100%" stop-color="#FFC94D"/>
-          </linearGradient>
-          <path d="M40 30 L40 90 L8 230 a14 14 0 0 0 14 24 L178 254 a14 14 0 0 0 14-24 L160 90 L160 30" fill="none" stroke="#1F5C42" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
-          <line x1="30" y1="30" x2="170" y2="30" stroke="#1F5C42" stroke-width="6" stroke-linecap="round"/>
-          <line x1="52" y1="120" x2="68" y2="120" stroke="#1F5C42" stroke-width="3" opacity="0.5"/>
-          <line x1="52" y1="160" x2="68" y2="160" stroke="#1F5C42" stroke-width="3" opacity="0.5"/>
-          <line x1="52" y1="200" x2="68" y2="200" stroke="#1F5C42" stroke-width="3" opacity="0.5"/>
-        </svg>
-        <p id="progressPercent" class="progress-percent">0%</p>
-        <p class="progress-caption">任務進度</p>
-      </div>
-
-      <div class="checklist-cols">
-        <div class="check-group">
-          <h3>🎒 日常裝備</h3>
-          <ul class="check-list" data-group="daily">
-            <li><label><input type="checkbox" data-item="衣物"><span>個人換洗衣物（含內衣褲）</span></label></li>
-            <li><label><input type="checkbox" data-item="盥洗"><span>盥洗用品（牙刷、毛巾、沐浴乳等）</span></label></li>
-            <li><label><input type="checkbox" data-item="吹風機"><span>個人吹風機</span></label></li>
-            <li><label><input type="checkbox" data-item="餐具水壺"><span>環保餐具與水壺（營區環保守則）</span></label></li>
-            <li><label><input type="checkbox" data-item="防曬防蚊"><span>防曬乳、防蚊液</span></label></li>
-            <li><label><input type="checkbox" data-item="雨具"><span>雨具</span></label></li>
-          </ul>
-        </div>
-
-        <div class="check-group">
-          <h3>🛡️ 隨身護甲小物</h3>
-          <ul class="check-list" data-group="protect">
-            <li><label><input type="checkbox" data-item="藥品"><span>個人藥品（特殊用藥）</span></label></li>
-            <li><label><input type="checkbox" data-item="口罩"><span>醫療用口罩</span></label></li>
-            <li><label><input type="checkbox" data-item="證件"><span>個人身分證件與健保卡</span></label></li>
-            <li><label><input type="checkbox" data-item="現金"><span>少量現金</span></label></li>
-          </ul>
-        </div>
-
-        <div class="check-group check-group-warning">
-          <h3>⚠ 過夜歇息包（基地不供寢具）</h3>
-          <p class="warning-note">小隊基地的寢室只提供床位，<strong>沒有提供任何寢具</strong>，請務必自備寢具，才能好好休息、隔天繼續全力闖關。基地內備有洗衣機／烘衣機，費用為 20 元／次。</p>
-          <ul class="check-list" data-group="bedding">
-            <li><label><input type="checkbox" data-item="睡袋棉被"><span>睡袋 / 小棉被</span></label></li>
-            <li><label><input type="checkbox" data-item="枕頭"><span>個人枕頭</span></label></li>
-          </ul>
-        </div>
-
-        <div class="check-group check-group-warning">
-          <h3>⚠ 實驗戰甲（關卡強制規定）</h3>
-          <p class="warning-note">第一天與第二天要挑戰實驗室關卡，<strong>務必穿著長褲及包鞋</strong>才能入場，嚴禁涼鞋／拖鞋進入實驗室。</p>
-          <ul class="check-list" data-group="lab">
-            <li><label><input type="checkbox" data-item="長褲"><span>長褲（Day 1 &amp; Day 2 必穿）</span></label></li>
-            <li><label><input type="checkbox" data-item="包鞋"><span>包鞋（Day 1 &amp; Day 2 必穿）</span></label></li>
-            <li><label><input type="checkbox" data-item="實驗衣"><span>實驗衣（已有者請務必自行攜帶）</span></label></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ TRANSPORT ============ -->
-  <section id="transport" class="section">
-    <header class="section-head mission-panel">
-      <div class="mission-bar">
-        <span class="mission-dot" aria-hidden="true"></span>
-        <span class="mission-tag">SYSTEM://TRANSPORT_ROUTE</span>
-        <span class="mission-index">05 / 07</span>
-      </div>
-      <div class="mission-body">
-        <p class="eyebrow">交通路線</p>
-        <h2>交通路線</h2>
-        <p class="section-desc">不管走哪條路線，終點都是「彰化縣原住民生活館」下車，步行約 10 分鐘即可抵達小隊基地，也可直接搭計程車前來喔！</p>
-      </div>
-    </header>
-
-    <a class="gmap-card" href="https://www.google.com/maps/search/?api=1&query=%E5%9C%8B%E7%AB%8B%E5%BD%B0%E5%8C%96%E5%B8%AB%E7%AF%84%E5%A4%A7%E5%AD%B8%E9%80%B2%E5%BE%B7%E6%A0%A1%E5%8D%80" target="_blank" rel="noopener noreferrer" aria-label="在 Google 地圖開啟國立彰化師範大學進德校區位置">
-      <iframe class="gmap-frame" src="https://www.google.com/maps?q=%E5%9C%8B%E7%AB%8B%E5%BD%B0%E5%8C%96%E5%B8%AB%E7%AF%84%E5%A4%A7%E5%AD%B8%E9%80%B2%E5%BE%B7%E6%A0%A1%E5%8D%80&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="國立彰化師範大學進德校區地圖" tabindex="-1"></iframe>
-      <span class="gmap-badge">📍 國立彰化師範大學．進德校區 — 點擊在 Google 地圖開啟 ↗</span>
-    </a>
-
-    <div class="tabs" role="tablist" aria-label="交通方式">
-      <button class="tab active" role="tab" aria-selected="true" data-tab="train">🚆 火車</button>
-      <button class="tab" role="tab" aria-selected="false" data-tab="hsr">🚄 高鐵</button>
-      <button class="tab" role="tab" aria-selected="false" data-tab="hsr-train">🔁 高鐵+火車</button>
-      <button class="tab" role="tab" aria-selected="false" data-tab="car">🚗 自行開車</button>
-    </div>
-
-    <div class="tab-panel active" id="panel-train">
-      <p>從<strong>彰化火車站</strong>搭乘「彰化客運」往台中方向、或「台中客運」101 路線，於「彰化縣原住民生活館」下車，步行約 10 分鐘抵達；也可搭乘計程車前來。</p>
-      <div class="table-wrap">
-        <table>
-          <caption>彰化客運時刻表｜彰化火車站 → 原住民生活館</caption>
-          <thead><tr><th>車次（路線）</th><th>出發時間</th><th>抵達時間</th></tr></thead>
-          <tbody>
-            <tr><td>6917（經南崗）</td><td>09:00</td><td>09:10</td></tr>
-            <tr><td>6918（經林子頭）</td><td>09:20</td><td>09:30</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <caption>台中客運時刻表｜彰化火車站 → 原住民生活館</caption>
-          <thead><tr><th>車次（路線）</th><th>出發時間</th><th>抵達時間</th></tr></thead>
-          <tbody><tr><td>101</td><td>08:50</td><td>09:00</td></tr></tbody>
-        </table>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <caption>回程｜彰師大進德校區 → 彰化火車站</caption>
-          <thead><tr><th>車次（路線）</th><th>出發時間</th></tr></thead>
-          <tbody><tr><td>2A（統聯客運側站牌）</td><td>16:40</td></tr></tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="tab-panel" id="panel-hsr">
-      <p>搭乘臺灣高鐵於<strong>台中（烏日）站</strong>下車，轉乘以下公車路線至「彰化縣原住民生活館」下車，步行約 10 分鐘抵達。</p>
-      <ul class="route-list">
-        <li>彰化客運 6936 台灣好行—鹿港祈福線</li>
-        <li>員林客運 6933 台中—鹿港線</li>
-        <li>員林客運 6933A 台中—鹿港線</li>
-        <li>員林客運 6737〔台中—大城—西港〕線</li>
-        <li>員林客運 6738〔台中—芳苑—王功〕線</li>
-      </ul>
-      <p class="note">以上資訊若有異動，以高鐵車站現場公告為準。</p>
-    </div>
-
-    <div class="tab-panel" id="panel-hsr-train">
-      <p>從臺灣高鐵<strong>台中站</strong>下車，轉搭台鐵至<strong>彰化火車站</strong>下車，再依「火車」頁籤的公車路線搭乘彰化客運／台中客運 101，於彰化縣原住民生活館下車，步行約 10 分鐘抵達；也可搭乘計程車前來。</p>
-    </div>
-
-    <div class="tab-panel" id="panel-car">
-      <div class="card-grid car-grid">
-        <article class="card">
-          <p class="card-icon">🛑</p>
-          <h3>臨停下車</h3>
-          <p class="card-body">可至「正門」旁放學員下車。<strong>切勿停靠校門口</strong>，易開罰單及拖吊！</p>
+  function buildAllTeamsMarkup() {
+    return TEAMS.map(team => {
+      const leaders = team.leaders.map(escapeHtml).join('、');
+      const members = team.members
+        .map(m => `<span class="chip">${escapeHtml(m.name)}<br><small>${escapeHtml(m.school)}</small></span>`)
+        .join('');
+      return `
+        <article class="roster-group">
+          <h4>第 ${team.id} 小隊</h4>
+          <p class="roster-leaders">隊輔：<strong>${leaders}</strong></p>
+          <div class="chip-row">${members}</div>
         </article>
-        <article class="card">
-          <p class="card-icon">🅿️</p>
-          <h3>陪同入校</h3>
-          <p class="card-body">如需入校，請由「西二門」進入，停放至「地下停車場」（需付費）。</p>
-        </article>
-        <article class="card">
-          <p class="card-icon">🚶</p>
-          <h3>報到動線</h3>
-          <p class="card-body">進入校園後，依循指標步行至「活動中心」，現場將有工作人員引導至報到處。</p>
-        </article>
-      </div>
+      `;
+    }).join('');
+  }
 
-      <div class="campus-map" aria-hidden="true">
-        <img class="map-svg" src="assets/campus-map-car.png" alt="校園地圖一覽表：西二門、地下停車場、進德校區正門與校內動線示意圖">
-        <p class="map-caption">校園地圖一覽表｜西二門、地下停車場、進德校區正門位置示意</p>
-      </div>
-    </div>
-  </section>
+  let modalBuilt = false;
+  function openModal() {
+    if (!modalBuilt) {
+      allTeamsBody.innerHTML = buildAllTeamsMarkup();
+      modalBuilt = true;
+    }
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
 
-  <!-- ============ RULES ============ -->
-  <section id="rules" class="section section-alt">
-    <header class="section-head mission-panel">
-      <div class="mission-bar">
-        <span class="mission-dot" aria-hidden="true"></span>
-        <span class="mission-tag">SYSTEM://PROTOCOLS</span>
-        <span class="mission-index">06 / 07</span>
-      </div>
-      <div class="mission-body">
-        <p class="eyebrow">任務守則</p>
-        <h2>任務守則</h2>
-        <p class="section-desc">出任務前，每位小隊員都要知道的重要規則。</p>
-      </div>
-    </header>
+  function closeModal() {
+    modal.hidden = true;
+    document.body.style.overflow = '';
+  }
 
-    <div class="card-grid">
-      <article class="card">
-        <p class="card-icon">💳</p>
-        <h3>退費政策</h3>
-        <p class="card-body">即日起，不受理因個人因素之退費申請。</p>
-        <p class="card-body"><strong>不可抗力條款：</strong>若因疫情或其他不可控因素導致本營停辦，將依「籌備階段的準備程度」按比例退費。</p>
-      </article>
+  viewAllBtn.addEventListener('click', openModal);
+  modalBackdrop.addEventListener('click', closeModal);
+  modalCloseBtn.addEventListener('click', closeModal);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !modal.hidden) closeModal();
+  });
 
-      <article class="card">
-        <p class="card-icon">📝</p>
-        <h3>請假與離隊規定</h3>
-        <p class="card-body">任務期間如有中途離隊需求，請務必依循以下流程：</p>
-        <ol class="step-list">
-          <li>自行下載官方表單「中途離營切結書」。</li>
-          <li>詳細註記提早離開之「日期」與「時段」。</li>
-          <li>於報到日（7/20）當天繳交紙本給工作人員。</li>
-        </ol>
-        <p class="note">表單由主辦單位提供，請向總召／副召信箱索取下載連結。</p>
-      </article>
-    </div>
-  </section>
-
-  <!-- ============ CONTACT ============ -->
-  <section id="contact" class="section">
-    <header class="section-head mission-panel">
-      <div class="mission-bar">
-        <span class="mission-dot" aria-hidden="true"></span>
-        <span class="mission-tag">SYSTEM://CONTACT_BASE</span>
-        <span class="mission-index">07 / 07</span>
-      </div>
-      <div class="mission-body">
-        <p class="eyebrow">通訊頻道</p>
-        <h2>通訊頻道</h2>
-        <p class="section-desc">出發前如果訊號中斷、任務有疑問，歡迎隨時呼叫小隊指揮中心。</p>
-      </div>
-    </header>
-
-    <div class="card-grid">
-      <article class="card">
-        <p class="card-icon">👤</p>
-        <h3>總召 林妤妤</h3>
-        <p class="card-body">任務期間如有任何緊急狀況，歡迎直接呼叫總召。</p>
-        <p class="card-addr"><a href="tel:0912345678">📞 0912-345-678</a></p>
-      </article>
-      <article class="card">
-        <p class="card-icon">👤</p>
-        <h3>副召 張芸芸</h3>
-        <p class="card-body">找不到總召時，也可以聯繫副召協助處理。</p>
-        <p class="card-addr"><a href="tel:091245873">📞 091-245-873</a></p>
-      </article>
-      <article class="card">
-        <p class="card-icon">✉️</p>
-        <h3>營隊信箱</h3>
-        <p class="card-body">行前準備、報名相關問題都可以寄信詢問。</p>
-        <p class="card-addr"><a href="mailto:chemcamp2026ncue@gmail.com">chemcamp2026ncue@gmail.com</a></p>
-      </article>
-    </div>
-
-    <div class="social-links">
-      <a class="social-pill" href="https://www.facebook.com/p/2026-%E5%BD%B0%E5%B8%AB%E5%A4%A7%E5%8C%96%E5%AD%B8%E7%87%9F-100090976293430/" target="_blank" rel="noopener noreferrer">📘 Facebook 粉絲頁</a>
-      <a class="social-pill" href="https://www.instagram.com/ncuechem_camp2026/" target="_blank" rel="noopener noreferrer">📸 Instagram</a>
-    </div>
-
-    <footer class="site-footer">
-      <p>本網站依「2026 彰化師大化學營 行前通知書」內容整理製作，僅供隊員與家長行前準備參考，正式規定請以營隊官方公告為準。準備好了嗎？營隊現場見！🏁</p>
-    </footer>
-  </section>
-
-</main>
-
-<!-- ============ MISSION COMPLETE POPUP ============ -->
-<div id="completeModal" class="modal complete-modal" hidden>
-  <div class="modal-backdrop" id="completeBackdrop"></div>
-  <div class="complete-panel" role="dialog" aria-modal="true" aria-labelledby="completeTitle">
-    <button id="completeCloseBtn" class="modal-close" type="button" aria-label="關閉完成畫面">✕</button>
-    <h3 id="completeTitle" class="sr-only">任務完成</h3>
-    <img class="complete-image" src="assets/mission-complete.jpg" alt="彰師大進德校區明信片：恭喜你完成準備，期待在彰師大化學營與你相見">
-  </div>
-</div>
-
-<script src="script.js"></script>
-</body>
-</html>
+  /* ---------- transport tabs ---------- */
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.tab-panel');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
+      panels.forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+      document.getElementById(`panel-${tab.dataset.tab}`).classList.add('active');
+    });
+  });
+})();
