@@ -236,6 +236,8 @@
     resultBox.hidden = false;
   }
 
+  const viewAllBtn = document.getElementById('viewAllBtn');
+
   function runSearch() {
     const raw = nameInput.value;
     if (!normalize(raw)) {
@@ -248,6 +250,7 @@
     } else {
       renderNotFound(raw);
     }
+    viewAllBtn.hidden = false;
   }
 
   searchBtn.addEventListener('click', runSearch);
@@ -256,7 +259,6 @@
   });
 
   /* ---------- all-teams modal ---------- */
-  const viewAllBtn = document.getElementById('viewAllBtn');
   const modal = document.getElementById('allTeamsModal');
   const modalBackdrop = document.getElementById('modalBackdrop');
   const modalCloseBtn = document.getElementById('modalCloseBtn');

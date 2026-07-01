@@ -77,7 +77,7 @@
       </div>
 
       <div class="hero-cta">
-        <a href="#checklist" class="btn btn-primary">開始發芽裝備 →</a>
+        <a href="#teams" class="btn btn-primary">開始行前準備 →</a>
         <a href="#transport" class="btn btn-ghost">查遷徙路線</a>
       </div>
     </div>
@@ -168,6 +168,19 @@
       <p id="finderHint" class="finder-hint">找不到你的名字嗎？姓名須與報名資料完全一致，如有問題請聯繫隊輔或工作人員。</p>
 
       <div id="teamResult" class="team-result" hidden></div>
+
+      <div class="finder-footer">
+        <button id="viewAllBtn" class="fab fab-inline" type="button" hidden>👀 查看全員名單</button>
+      </div>
+    </div>
+
+    <div id="allTeamsModal" class="modal" hidden>
+      <div class="modal-backdrop" id="modalBackdrop"></div>
+      <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <button id="modalCloseBtn" class="modal-close" type="button" aria-label="關閉全員名單">✕</button>
+        <h3 id="modalTitle">🌱 全員小隊名單</h3>
+        <div id="allTeamsBody" class="modal-body"></div>
+      </div>
     </div>
   </section>
 
@@ -254,6 +267,11 @@
       <h2>遷徙路線</h2>
       <p class="section-desc">不管走哪條路線，終點都是「彰化縣原住民生活館」下車，步行約 10 分鐘即可抵達小隊基地，也可直接搭計程車前來喔！</p>
     </header>
+
+    <a class="gmap-card" href="https://www.google.com/maps/search/?api=1&query=%E5%9C%8B%E7%AB%8B%E5%BD%B0%E5%8C%96%E5%B8%AB%E7%AF%84%E5%A4%A7%E5%AD%B8%E9%80%B2%E5%BE%B7%E6%A0%A1%E5%8D%80" target="_blank" rel="noopener noreferrer" aria-label="在 Google 地圖開啟國立彰化師範大學進德校區位置">
+      <iframe class="gmap-frame" src="https://www.google.com/maps?q=%E5%9C%8B%E7%AB%8B%E5%BD%B0%E5%8C%96%E5%B8%AB%E7%AF%84%E5%A4%A7%E5%AD%B8%E9%80%B2%E5%BE%B7%E6%A0%A1%E5%8D%80&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="國立彰化師範大學進德校區地圖" tabindex="-1"></iframe>
+      <span class="gmap-badge">📍 國立彰化師範大學．進德校區 — 點擊在 Google 地圖開啟 ↗</span>
+    </a>
 
     <div class="tabs" role="tablist" aria-label="交通方式">
       <button class="tab active" role="tab" aria-selected="true" data-tab="train">🚆 火車</button>
@@ -405,18 +423,6 @@
   </section>
 
 </main>
-
-<!-- ============ ALL TEAMS FLOATING ACTION + MODAL ============ -->
-<button id="viewAllBtn" class="fab" type="button">👀 查看全員名單</button>
-
-<div id="allTeamsModal" class="modal" hidden>
-  <div class="modal-backdrop" id="modalBackdrop"></div>
-  <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <button id="modalCloseBtn" class="modal-close" type="button" aria-label="關閉全員名單">✕</button>
-    <h3 id="modalTitle">🌱 全員小隊名單</h3>
-    <div id="allTeamsBody" class="modal-body"></div>
-  </div>
-</div>
 
 <script src="script.js"></script>
 </body>
