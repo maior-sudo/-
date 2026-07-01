@@ -120,7 +120,6 @@
   const progressPercent = document.getElementById('progressPercent');
   const miniFill = document.getElementById('miniProgressFill');
   const miniLabel = document.getElementById('miniProgressLabel');
-  const viewBadgeBtn = document.getElementById('viewBadgeBtn');
 
   // beaker fluid geometry: top y=40, bottom y=254
   const BEAKER_TOP = 40;
@@ -128,10 +127,6 @@
 
   // Progress = checklist items + 1 virtual item for "found my squad at least once".
   const TOTAL_ITEMS = checkboxes.length + 1;
-
-  // Tracks the previous percentage so we only fire the celebration once,
-  // right when progress *crosses into* 100% (not on initial page load).
-  let lastPct = null;
 
   function loadState() {
     try {
@@ -165,12 +160,6 @@
     progressPercent.textContent = `${pct}%`;
     miniFill.style.width = `${pct}%`;
     miniLabel.textContent = `任務進度 ${pct}%`;
-
-    if (viewBadgeBtn) viewBadgeBtn.hidden = pct !== 100;
-
-    const justReached100 = pct === 100 && lastPct !== null && lastPct !== 100;
-    lastPct = pct;
-    if (justReached100) openCompleteModal();
   }
 
   function markTeamLookupDone() {
@@ -198,30 +187,6 @@
   }
   initChecklist();
 
-  /* ---------- mission-complete celebration modal ---------- */
-  const completeModal = document.getElementById('completeModal');
-  const completeBackdrop = document.getElementById('completeBackdrop');
-  const completeCloseBtn = document.getElementById('completeCloseBtn');
-
-  function openCompleteModal() {
-    if (!completeModal) return;
-    completeModal.hidden = false;
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeCompleteModal() {
-    if (!completeModal) return;
-    completeModal.hidden = true;
-    document.body.style.overflow = '';
-  }
-
-  if (completeBackdrop) completeBackdrop.addEventListener('click', closeCompleteModal);
-  if (completeCloseBtn) completeCloseBtn.addEventListener('click', closeCompleteModal);
-  if (viewBadgeBtn) viewBadgeBtn.addEventListener('click', openCompleteModal);
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && completeModal && !completeModal.hidden) closeCompleteModal();
-  });
-
   /* ---------- reset progress ---------- */
   const resetProgressBtn = document.getElementById('resetProgressBtn');
   if (resetProgressBtn) {
@@ -234,7 +199,6 @@
         /* storage unavailable — fail silently */
       }
       checkboxes.forEach(cb => { cb.checked = false; });
-      closeCompleteModal();
       updateProgress();
     });
   }

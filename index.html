@@ -50,7 +50,6 @@
     <div class="mini-progress"><div id="miniProgressFill" class="mini-progress-fill"></div></div>
     <p id="miniProgressLabel" class="mini-progress-label">任務進度 0%</p>
     <button id="resetProgressBtn" class="reset-btn" type="button">↺ 重置任務進度</button>
-    <button id="viewBadgeBtn" class="reset-btn view-badge-btn" type="button" hidden>🏆 查看完成畫面</button>
   </div>
 </nav>
 
@@ -380,24 +379,8 @@
       </div>
 
       <div class="campus-map" aria-hidden="true">
-        <svg viewBox="0 0 480 260" class="map-svg">
-          <ellipse cx="240" cy="130" rx="220" ry="110" fill="none" stroke="#3FAE6B" stroke-width="2" stroke-dasharray="2 6"/>
-          <circle cx="120" cy="190" r="20" fill="none" stroke="#1F5C42" stroke-width="2.4"/>
-          <text x="120" y="194" text-anchor="middle" class="map-label">地下停車場</text>
-          <circle cx="240" cy="60" r="14" fill="none" stroke="#FFC94D" stroke-width="2.4"/>
-          <text x="240" y="44" text-anchor="middle" class="map-label">西二門</text>
-          <circle cx="260" cy="220" r="20" fill="none" stroke="#FF6F4C" stroke-width="2.4"/>
-          <text x="260" y="252" text-anchor="middle" class="map-label">進德校區正門</text>
-          <rect x="205" y="120" width="70" height="36" rx="6" fill="#3FAE6B" opacity="0.15" stroke="#3FAE6B" stroke-width="1.5"/>
-          <text x="240" y="142" text-anchor="middle" class="map-label">活動中心</text>
-          <path d="M260 200 L240 160 L240 80" fill="none" stroke="#FF6F4C" stroke-width="3" marker-end="url(#arrow)"/>
-          <defs>
-            <marker id="arrow" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto">
-              <path d="M0,0 L6,3 L0,6 Z" fill="#FF6F4C"/>
-            </marker>
-          </defs>
-        </svg>
-        <p class="map-caption">示意圖：紅線為步行報到動線（正門 → 活動中心）</p>
+        <img class="map-svg" src="assets/campus-map-car.png" alt="校園地圖一覽表：西二門、地下停車場、進德校區正門與校內動線示意圖">
+        <p class="map-caption">校園地圖一覽表｜西二門、地下停車場、進德校區正門位置示意</p>
       </div>
     </div>
   </section>
@@ -486,80 +469,6 @@
   </section>
 
 </main>
-
-<!-- ============ MISSION COMPLETE CELEBRATION ============ -->
-<div id="completeModal" class="modal complete-modal" hidden>
-  <div class="modal-backdrop" id="completeBackdrop"></div>
-  <div class="complete-panel" role="dialog" aria-modal="true" aria-labelledby="completeTitle">
-    <button id="completeCloseBtn" class="modal-close complete-close" type="button" aria-label="關閉完成畫面">✕</button>
-
-    <div class="confetti-field" aria-hidden="true">
-      <span class="confetti"></span><span class="confetti"></span><span class="confetti"></span>
-      <span class="confetti"></span><span class="confetti"></span><span class="confetti"></span>
-      <span class="confetti"></span><span class="confetti"></span><span class="confetti"></span>
-      <span class="confetti"></span><span class="confetti"></span><span class="confetti"></span>
-      <span class="confetti"></span><span class="confetti"></span>
-    </div>
-
-    <div class="complete-photo">
-      <svg viewBox="0 0 480 280" class="campus-illustration" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-        <defs>
-          <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#8FD8EE"/>
-            <stop offset="100%" stop-color="#EAF7F0"/>
-          </linearGradient>
-        </defs>
-        <rect width="480" height="280" fill="url(#skyGrad)"/>
-        <rect y="230" width="480" height="50" fill="#DCE9DC"/>
-        <!-- gate building -->
-        <rect x="150" y="90" width="180" height="140" fill="#F4EFE1" stroke="#1F5C42" stroke-width="3"/>
-        <rect x="205" y="140" width="70" height="90" fill="#7A5A38"/>
-        <rect x="150" y="70" width="180" height="24" fill="#EDE6D2" stroke="#1F5C42" stroke-width="3"/>
-        <rect x="235" y="40" width="4" height="34" fill="#1F5C42"/>
-        <path d="M239 42 L268 50 L239 58 Z" fill="#FF6F4C"/>
-        <!-- left tree -->
-        <rect x="92" y="150" width="10" height="80" fill="#7A5A38"/>
-        <circle cx="97" cy="140" r="30" fill="#3FAE6B"/>
-        <circle cx="75" cy="160" r="20" fill="#57D686"/>
-        <!-- right tree -->
-        <rect x="378" y="150" width="10" height="80" fill="#7A5A38"/>
-        <circle cx="383" cy="140" r="30" fill="#3FAE6B"/>
-        <circle cx="405" cy="160" r="20" fill="#57D686"/>
-        <!-- path -->
-        <path d="M210 230 L230 280 L250 280 L240 230 Z" fill="#E6DCC4" opacity=".8"/>
-      </svg>
-
-      <div class="complete-headline">
-        <p class="complete-eyebrow">SYSTEM://MISSION_COMPLETE</p>
-        <h3 id="completeTitle">彰師大進德校區</h3>
-        <p class="complete-sub">恭喜你完成準備，<br>期待在彰師大化學營與你相見！</p>
-      </div>
-    </div>
-
-    <div class="complete-side">
-      <div class="complete-stamp" aria-hidden="true">
-        <span class="stamp-icon">🧪</span>
-        <span class="stamp-text">MISSION<br>COMPLETE</span>
-      </div>
-
-      <svg class="complete-flower" viewBox="0 0 120 120" aria-hidden="true">
-        <g transform="translate(60,60)">
-          <g fill="#FF6F4C">
-            <ellipse rx="16" ry="30" transform="rotate(0) translate(0,-28)"/>
-            <ellipse rx="16" ry="30" transform="rotate(45) translate(0,-28)"/>
-            <ellipse rx="16" ry="30" transform="rotate(90) translate(0,-28)"/>
-            <ellipse rx="16" ry="30" transform="rotate(135) translate(0,-28)"/>
-            <ellipse rx="16" ry="30" transform="rotate(180) translate(0,-28)"/>
-            <ellipse rx="16" ry="30" transform="rotate(225) translate(0,-28)"/>
-            <ellipse rx="16" ry="30" transform="rotate(270) translate(0,-28)"/>
-            <ellipse rx="16" ry="30" transform="rotate(315) translate(0,-28)"/>
-          </g>
-          <circle r="16" fill="#FFC94D"/>
-        </g>
-      </svg>
-    </div>
-  </div>
-</div>
 
 <script src="script.js"></script>
 </body>
