@@ -238,7 +238,10 @@ main{position:relative; z-index:1; margin-left:260px;}
 /* ===== cards ===== */
 .card-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:20px; }
 .car-grid{ margin-bottom:32px; }
-.campus-map-btn{ display:inline-flex; }
+.campus-map-card{ height:520px; }
+@media (max-width:640px){
+  .campus-map-card{ height:420px; }
+}
 .card{
   background:#fff; border:1px solid var(--line); border-radius:var(--radius);
   padding:26px; box-shadow:var(--shadow);
