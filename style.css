@@ -447,12 +447,18 @@ tr:last-child td{ border-bottom:none; }
 
 /* ===== mission-complete popup ===== */
 .complete-panel{
-  position:relative; max-width:520px; width:100%; border-radius:20px;
+  position:relative; max-width:440px; width:100%; border-radius:20px;
   overflow:hidden; background:var(--paper); box-shadow:0 34px 70px -20px rgba(0,0,0,.42);
   padding:0;
 }
-.complete-image{ display:block; width:100%; height:auto; }
 .complete-panel .modal-close{ background:rgba(255,255,255,.92); }
+.complete-content{
+  padding:48px 32px 40px; text-align:center; display:flex; flex-direction:column; align-items:center;
+}
+.complete-icon{ font-size:2.6rem; margin:0 0 6px; }
+.complete-content h3{ margin:0 0 8px; font-size:1.3rem; }
+.complete-text{ color:var(--ink-soft); font-size:1rem; margin:0 0 26px; }
+.complete-btn{ width:100%; justify-content:center; }
 
 .roster-group{
   border:1px solid var(--line); border-radius:14px; padding:18px; background:#fff;
