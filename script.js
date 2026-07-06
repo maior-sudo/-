@@ -65,7 +65,6 @@
         { name: '王王雙', school: '東莞台校' },
         { name: '盧語欣', school: '小港高中' },
         { name: '簡子亦', school: '屏東女中' },
-        { name: '沈沛絜', school: '六家高中' },
         { name: '林昕緹', school: '育達高中' }
       ]
     }
