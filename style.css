@@ -323,6 +323,21 @@ main{position:relative; z-index:1; margin-left:260px;}
   .gmap-badge{ font-size:.78rem; }
 }
 
+/* ===== weather embed ===== */
+.weather-block{ margin-top:40px; }
+.weather-title{ font-size:1.05rem; margin:0 0 14px; }
+.weather-card{
+  border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow);
+  border:1px solid var(--line); background:#fff; height:640px;
+}
+.weather-frame{ width:100%; height:100%; border:0; display:block; }
+.weather-fallback{ margin-top:10px; font-size:.84rem; color:var(--ink-soft); }
+.weather-fallback a{ color:var(--forest); font-weight:700; text-decoration:underline; text-underline-offset:2px; }
+.weather-fallback a:hover{ color:var(--coral); }
+@media (max-width:640px){
+  .weather-card{ height:520px; }
+}
+
 /* ===== transport tabs ===== */
 .tabs{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:26px; }
 .tab{
