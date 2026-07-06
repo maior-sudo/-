@@ -217,6 +217,18 @@
     if (e.key === 'Escape' && completeModal && !completeModal.hidden) closeCompleteModal();
   });
 
+  const closePageBtn = document.getElementById('closePageBtn');
+  if (closePageBtn) {
+    closePageBtn.addEventListener('click', () => {
+      window.close();
+      // Some browsers block window.close() on pages not opened via script;
+      // fall back to a blank page so it at least feels "closed".
+      setTimeout(() => {
+        window.location.href = 'about:blank';
+      }, 300);
+    });
+  }
+
   /* ---------- reset progress ---------- */
   const resetProgressBtn = document.getElementById('resetProgressBtn');
   if (resetProgressBtn) {
