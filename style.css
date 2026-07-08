@@ -186,8 +186,36 @@ main{position:relative; z-index:1; margin-left:260px;}
 .stat-label{ margin:0; font-size:.74rem; color:var(--ink-soft); font-family:var(--font-mono); }
 .stat-value{ margin:4px 0 0; font-family:var(--font-display); font-weight:700; color:var(--forest); font-size:1.15rem; }
 .stat-unit{ font-size:.78rem; color:var(--ink-soft); font-weight:500; }
+.date-chip{ white-space:nowrap; display:inline-block; }
 
 .hero-cta{ display:flex; gap:14px; flex-wrap:wrap; }
+
+/* ===== homepage feature overview ===== */
+.feature-overview{ margin-top:36px; }
+.feature-overview-title{
+  font-family:var(--font-mono); font-size:.82rem; color:var(--ink-soft);
+  margin:0 0 14px; letter-spacing:.02em;
+}
+.feature-grid{
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(210px,1fr)); gap:12px;
+}
+.feature-card{
+  display:flex; align-items:center; gap:12px;
+  background:#fff; border:1px solid var(--line); border-radius:12px;
+  padding:14px 16px; text-decoration:none; color:inherit;
+  box-shadow:var(--shadow); border-left:4px solid var(--leaf);
+  transition:transform .15s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.feature-grid .feature-card:nth-child(2){ border-left-color:var(--sky); }
+.feature-grid .feature-card:nth-child(3){ border-left-color:var(--sun); }
+.feature-grid .feature-card:nth-child(4){ border-left-color:var(--violet); }
+.feature-grid .feature-card:nth-child(5){ border-left-color:var(--coral); }
+.feature-grid .feature-card:nth-child(6){ border-left-color:var(--sky); }
+.feature-card:hover{ transform:translateY(-3px); box-shadow:0 16px 28px -14px rgba(31,92,66,.28); }
+.feature-icon{ font-size:1.4rem; flex-shrink:0; }
+.feature-text{ display:flex; flex-direction:column; gap:2px; min-width:0; }
+.feature-name{ font-weight:700; color:var(--forest); font-size:.94rem; }
+.feature-desc{ font-size:.78rem; color:var(--ink-soft); }
 
 /* ===== bracket-cornered mission buttons ===== */
 .btn-mission{
