@@ -289,6 +289,21 @@ main{position:relative; z-index:1; margin-left:260px;}
 }
 
 /* ===== checklist ===== */
+.user-id-box{
+  background:#fff; border:1.5px solid var(--leaf); border-radius:var(--radius);
+  padding:18px 22px; margin-bottom:28px; box-shadow:var(--shadow);
+}
+.user-id-box label{
+  display:block; font-weight:700; color:var(--forest); font-size:.92rem; margin-bottom:8px;
+}
+.user-id-box input{
+  width:100%; max-width:320px; padding:10px 14px; border:1px solid var(--line);
+  border-radius:10px; font-size:.95rem; font-family:inherit; color:var(--forest);
+  background:var(--cream);
+}
+.user-id-box input:focus{ outline:2px solid var(--leaf); outline-offset:1px; }
+.user-id-hint{ margin:8px 0 0; font-size:.78rem; color:var(--ink-soft); }
+
 .checklist-layout{ display:flex; gap:48px; flex-wrap:wrap; align-items:flex-start; }
 .beaker-wrap{
   flex:0 0 200px; text-align:center; position:sticky; top:110px;

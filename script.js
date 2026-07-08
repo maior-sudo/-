@@ -1,6 +1,4 @@
 (() => {
-  const STORAGE_KEY = 'chemCamp2026Checklist';
-
   /* ---------- roster data ---------- */
   const TEAMS = [
     {
@@ -120,12 +118,13 @@
   }, { rootMargin: '-40% 0px -50% 0px', threshold: 0 });
   sections.forEach(s => spyObserver.observe(s));
 
-  /* ---------- checklist persistence + progress ---------- */
+  /* ---------- checklist persistence + progress (per-user, by name) ---------- */
   const checkboxes = Array.from(document.querySelectorAll('.check-list input[type="checkbox"]'));
   const liquid = document.getElementById('liquid');
   const progressPercent = document.getElementById('progressPercent');
   const miniFill = document.getElementById('miniProgressFill');
   const miniLabel = document.getElementById('miniProgressLabel');
+  const userNameInput = document.getElementById('userNameInput');
 
   // beaker fluid geometry: top y=40, bottom y=254
   const BEAKER_TOP = 40;
@@ -133,9 +132,26 @@
 
   const TOTAL_ITEMS = checkboxes.length;
 
+  const USER_NAME_KEY = 'chemCamp2026UserName';
+
+  function sanitizeName(raw) {
+    return String(raw || '').trim();
+  }
+
+  // Each person's checklist lives under its own key, keyed by their name,
+  // so multiple people sharing the same device never overwrite each other.
+  function storageKeyFor(name) {
+    const safe = sanitizeName(name) || '訪客';
+    return `chemCamp2026Checklist__${safe}`;
+  }
+
+  function getCurrentName() {
+    return userNameInput ? sanitizeName(userNameInput.value) : '';
+  }
+
   function loadState() {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = localStorage.getItem(storageKeyFor(getCurrentName()));
       return raw ? JSON.parse(raw) : {};
     } catch (e) {
       return {};
@@ -144,7 +160,7 @@
 
   function saveState(state) {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      localStorage.setItem(storageKeyFor(getCurrentName()), JSON.stringify(state));
     } catch (e) {
       /* storage unavailable — fail silently, state just won't persist */
     }
@@ -164,11 +180,40 @@
     miniLabel.textContent = `任務進度 ${pct}%`;
   }
 
-  function initChecklist() {
+  // (Re)loads the checklist checkboxes to match whichever name is currently
+  // active, so switching names swaps in that person's own saved progress.
+  function refreshChecklistForCurrentUser() {
     const state = loadState();
     checkboxes.forEach(cb => {
       const key = cb.dataset.item;
-      if (state[key]) cb.checked = true;
+      cb.checked = !!state[key];
+    });
+    updateProgress();
+  }
+
+  function initChecklist() {
+    // Restore the last-used name, if any, so returning visitors don't have
+    // to retype it every time.
+    if (userNameInput) {
+      try {
+        const savedName = localStorage.getItem(USER_NAME_KEY);
+        if (savedName) userNameInput.value = savedName;
+      } catch (e) {
+        /* storage unavailable — fail silently */
+      }
+
+      userNameInput.addEventListener('input', () => {
+        try {
+          localStorage.setItem(USER_NAME_KEY, getCurrentName());
+        } catch (e) {
+          /* storage unavailable — fail silently */
+        }
+        refreshChecklistForCurrentUser();
+      });
+    }
+
+    checkboxes.forEach(cb => {
+      const key = cb.dataset.item;
       cb.addEventListener('change', () => {
         const s = loadState();
         s[key] = cb.checked;
@@ -176,7 +221,8 @@
         updateProgress();
       });
     });
-    updateProgress();
+
+    refreshChecklistForCurrentUser();
   }
   initChecklist();
 
@@ -184,10 +230,10 @@
   const resetProgressBtn = document.getElementById('resetProgressBtn');
   if (resetProgressBtn) {
     resetProgressBtn.addEventListener('click', () => {
-      const confirmed = window.confirm('確定要重置任務進度嗎？所有已勾選的裝備紀錄都會被清除，此動作無法復原。');
+      const confirmed = window.confirm('確定要重置你的任務進度嗎？所有已勾選的裝備紀錄都會被清除，此動作無法復原。');
       if (!confirmed) return;
       try {
-        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(storageKeyFor(getCurrentName()));
       } catch (e) {
         /* storage unavailable — fail silently */
       }
