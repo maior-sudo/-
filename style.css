@@ -275,6 +275,11 @@ main{position:relative; z-index:1; margin-left:260px;}
 .pin-list{ display:flex; flex-direction:column; gap:8px; margin-bottom:14px; }
 .pin-list li{ display:flex; gap:8px; font-size:.94rem; color:var(--ink-soft); }
 .pin{ flex:none; }
+.card-wide .pin-num{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:20px; height:20px; border-radius:50%; background:var(--forest); color:#fff;
+  font-size:.72rem; font-weight:700; margin-top:1px;
+}
 
 .badge-row{ display:flex; gap:10px; flex-wrap:wrap; }
 .badge{
@@ -488,6 +493,10 @@ tr:last-child td{ border-bottom:none; }
 }
 .roster-leaders{ font-size:.85rem; color:var(--ink-soft); margin:0 0 10px; }
 .roster-leaders strong{ color:var(--forest); }
+
+.teams-list{ display:flex; flex-direction:column; gap:18px; }
+.teams-list .roster-group{ box-shadow:var(--shadow); padding:22px; }
+.teams-list .chip{ background:var(--cream); }
 
 /* ===== social links (contact section) ===== */
 .social-links{ display:flex; gap:12px; flex-wrap:wrap; margin-top:24px; padding-top:24px; border-top:1px dashed var(--line); }

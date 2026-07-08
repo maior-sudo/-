@@ -1,6 +1,5 @@
 (() => {
   const STORAGE_KEY = 'chemCamp2026Checklist';
-  const TEAM_LOOKUP_KEY = '__teamLookupDone';
 
   /* ---------- roster data ---------- */
   const TEAMS = [
@@ -70,21 +69,30 @@
     }
   ];
 
-  function normalize(str) {
-    return (str || '').trim().replace(/\s+/g, '');
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
-  function findPerson(rawName) {
-    const target = normalize(rawName);
-    if (!target) return null;
-    for (const team of TEAMS) {
-      const leaderMatch = team.leaders.find(n => normalize(n) === target);
-      if (leaderMatch) return { type: 'leader', team, name: leaderMatch };
-      const memberMatch = team.members.find(m => normalize(m.name) === target);
-      if (memberMatch) return { type: 'member', team, name: memberMatch.name };
-    }
-    return null;
+  /* ---------- render teams roster (in team order, no search) ---------- */
+  function renderTeamsList() {
+    const container = document.getElementById('teamsListBody');
+    if (!container) return;
+    container.innerHTML = TEAMS.map(team => {
+      const leaders = team.leaders.map(escapeHtml).join('、');
+      const members = team.members
+        .map(m => `<span class="chip">${escapeHtml(m.name)}<br><small>${escapeHtml(m.school)}</small></span>`)
+        .join('');
+      return `
+        <article class="roster-group">
+          <h4>第 ${team.id} 小隊</h4>
+          <p class="roster-leaders">隊輔：<strong>${leaders}</strong></p>
+          <div class="chip-row">${members}</div>
+        </article>
+      `;
+    }).join('');
   }
+  renderTeamsList();
 
   /* ---------- mobile nav toggle ---------- */
   const navToggle = document.getElementById('navToggle');
@@ -113,7 +121,7 @@
   }, { rootMargin: '-40% 0px -50% 0px', threshold: 0 });
   sections.forEach(s => spyObserver.observe(s));
 
-  /* ---------- checklist + team-lookup persistence, shared progress ---------- */
+  /* ---------- checklist persistence + progress ---------- */
   const checkboxes = Array.from(document.querySelectorAll('.check-list input[type="checkbox"]'));
   const liquid = document.getElementById('liquid');
   const progressPercent = document.getElementById('progressPercent');
@@ -124,8 +132,7 @@
   const BEAKER_TOP = 40;
   const BEAKER_BOTTOM = 254;
 
-  // Progress = checklist items + 1 virtual item for "found my squad at least once".
-  const TOTAL_ITEMS = checkboxes.length + 1;
+  const TOTAL_ITEMS = checkboxes.length;
 
   // Tracks the previous percentage so we only fire the popup once,
   // right when progress *crosses into* 100% (not on initial page load).
@@ -149,12 +156,9 @@
   }
 
   function updateProgress() {
-    const state = loadState();
     const checkedCount = checkboxes.filter(cb => cb.checked).length;
-    const lookupDone = !!state[TEAM_LOOKUP_KEY];
     const total = TOTAL_ITEMS;
-    const checked = checkedCount + (lookupDone ? 1 : 0);
-    const pct = total ? Math.round((checked / total) * 100) : 0;
+    const pct = total ? Math.round((checkedCount / total) * 100) : 0;
 
     const fillHeight = ((BEAKER_BOTTOM - BEAKER_TOP) * pct) / 100;
     liquid.setAttribute('y', BEAKER_BOTTOM - fillHeight);
@@ -167,15 +171,6 @@
     const justReached100 = pct === 100 && lastPct !== null && lastPct !== 100;
     lastPct = pct;
     if (justReached100) openCompleteModal();
-  }
-
-  function markTeamLookupDone() {
-    const s = loadState();
-    if (!s[TEAM_LOOKUP_KEY]) {
-      s[TEAM_LOOKUP_KEY] = true;
-      saveState(s);
-      updateProgress();
-    }
   }
 
   function initChecklist() {
@@ -233,7 +228,7 @@
   const resetProgressBtn = document.getElementById('resetProgressBtn');
   if (resetProgressBtn) {
     resetProgressBtn.addEventListener('click', () => {
-      const confirmed = window.confirm('確定要重置任務進度嗎？所有已勾選的裝備與查詢紀錄都會被清除，此動作無法復原。');
+      const confirmed = window.confirm('確定要重置任務進度嗎？所有已勾選的裝備紀錄都會被清除，此動作無法復原。');
       if (!confirmed) return;
       try {
         localStorage.removeItem(STORAGE_KEY);
@@ -245,121 +240,6 @@
       updateProgress();
     });
   }
-
-  /* ---------- team finder ---------- */
-  const nameInput = document.getElementById('nameInput');
-  const searchBtn = document.getElementById('searchTeamBtn');
-  const resultBox = document.getElementById('teamResult');
-
-  function escapeHtml(str) {
-    return String(str)
-      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  }
-
-  function renderOwnTeam(found) {
-    const { team, name, type } = found;
-    const leaderChips = team.leaders
-      .map(l => `<span class="chip is-leader">${escapeHtml(l)}</span>`)
-      .join('');
-    const memberChips = team.members
-      .map(m => {
-        const isYou = normalize(m.name) === normalize(name);
-        return `<span class="chip${isYou ? ' is-you' : ''}">${escapeHtml(m.name)}${isYou ? '（你）' : ''}</span>`;
-      })
-      .join('');
-    const roleNote = type === 'leader' ? '（你是這個小隊的隊輔）' : '';
-
-    resultBox.classList.remove('is-error');
-    resultBox.innerHTML = `
-      <span class="result-badge">✅ 找到了！</span>
-      <h3 class="result-heading">第 ${team.id} 小隊 ${roleNote}</h3>
-      <div class="result-block">
-        <h4>隊輔小隊長</h4>
-        <div class="chip-row">${leaderChips}</div>
-      </div>
-      <div class="result-block">
-        <h4>同隊小隊員</h4>
-        <div class="chip-row">${memberChips}</div>
-      </div>
-    `;
-    resultBox.hidden = false;
-    markTeamLookupDone();
-  }
-
-  function renderNotFound(rawName) {
-    resultBox.classList.add('is-error');
-    resultBox.innerHTML = `
-      <span class="result-badge">🔍 沒有找到</span>
-      <p class="result-error-text">找不到「${escapeHtml(rawName.trim())}」，請確認姓名是否與報名資料完全一致（含正確用字），或聯繫隊輔確認你的分隊。</p>
-    `;
-    resultBox.hidden = false;
-  }
-
-  const viewAllBtn = document.getElementById('viewAllBtn');
-
-  function runSearch() {
-    const raw = nameInput.value;
-    if (!normalize(raw)) {
-      nameInput.focus();
-      return;
-    }
-    const found = findPerson(raw);
-    if (found) {
-      renderOwnTeam(found);
-    } else {
-      renderNotFound(raw);
-    }
-    viewAllBtn.hidden = false;
-  }
-
-  searchBtn.addEventListener('click', runSearch);
-  nameInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') runSearch();
-  });
-
-  /* ---------- all-teams modal ---------- */
-  const modal = document.getElementById('allTeamsModal');
-  const modalBackdrop = document.getElementById('modalBackdrop');
-  const modalCloseBtn = document.getElementById('modalCloseBtn');
-  const allTeamsBody = document.getElementById('allTeamsBody');
-
-  function buildAllTeamsMarkup() {
-    return TEAMS.map(team => {
-      const leaders = team.leaders.map(escapeHtml).join('、');
-      const members = team.members
-        .map(m => `<span class="chip">${escapeHtml(m.name)}<br><small>${escapeHtml(m.school)}</small></span>`)
-        .join('');
-      return `
-        <article class="roster-group">
-          <h4>第 ${team.id} 小隊</h4>
-          <p class="roster-leaders">隊輔：<strong>${leaders}</strong></p>
-          <div class="chip-row">${members}</div>
-        </article>
-      `;
-    }).join('');
-  }
-
-  let modalBuilt = false;
-  function openModal() {
-    if (!modalBuilt) {
-      allTeamsBody.innerHTML = buildAllTeamsMarkup();
-      modalBuilt = true;
-    }
-    modal.hidden = false;
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeModal() {
-    modal.hidden = true;
-    document.body.style.overflow = '';
-  }
-
-  viewAllBtn.addEventListener('click', openModal);
-  modalBackdrop.addEventListener('click', closeModal);
-  modalCloseBtn.addEventListener('click', closeModal);
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !modal.hidden) closeModal();
-  });
 
   /* ---------- transport tabs ---------- */
   const tabs = document.querySelectorAll('.tab');

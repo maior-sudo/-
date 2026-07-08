@@ -227,38 +227,17 @@
     <header class="section-head mission-panel">
       <div class="mission-bar">
         <span class="mission-dot" aria-hidden="true"></span>
-        <span class="mission-tag">SYSTEM://SQUAD_FINDER</span>
+        <span class="mission-tag">SYSTEM://SQUAD_ROSTER</span>
         <span class="mission-index">03 / 07</span>
       </div>
       <div class="mission-body">
-        <p class="eyebrow">分隊查詢</p>
-        <h2>分隊查詢</h2>
-        <p class="section-desc">輸入你的姓名，找到你的小隊隊輔與同隊夥伴。查詢也會計入你的任務進度喔！</p>
+        <p class="eyebrow">分隊名單</p>
+        <h2>分隊名單</h2>
+        <p class="section-desc">依小隊順序列出全員名單，找到你的隊輔與同隊夥伴吧！</p>
       </div>
     </header>
 
-    <div class="finder-card">
-      <div class="finder-input-row">
-        <input type="text" id="nameInput" class="finder-input" placeholder="請輸入你的姓名，例如：王小明" autocomplete="off">
-        <button id="searchTeamBtn" class="btn btn-primary finder-btn" type="button">查詢我的小隊 🔍</button>
-      </div>
-      <p id="finderHint" class="finder-hint">找不到你的名字嗎？姓名須與報名資料完全一致，如有問題請聯繫營隊。</p>
-
-      <div id="teamResult" class="team-result" hidden></div>
-
-      <div class="finder-footer">
-        <button id="viewAllBtn" class="fab fab-inline" type="button" hidden>點擊查看全員名單</button>
-      </div>
-    </div>
-
-    <div id="allTeamsModal" class="modal" hidden>
-      <div class="modal-backdrop" id="modalBackdrop"></div>
-      <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-        <button id="modalCloseBtn" class="modal-close" type="button" aria-label="關閉全員名單">✕</button>
-        <h3 id="modalTitle">📋 全員名單</h3>
-        <div id="allTeamsBody" class="modal-body"></div>
-      </div>
-    </div>
+    <div id="teamsListBody" class="teams-list"></div>
   </section>
 
   <!-- ============ CHECKLIST ============ -->
@@ -465,7 +444,7 @@
       <div class="mission-body">
         <p class="eyebrow">退費與中途離營規定</p>
         <h2>退費與中途離營規定</h2>
-        <p class="section-desc">若臨時無法參與營隊時或要中途外出時的注意事項</p>
+        <p class="section-desc">若臨時無法參與營隊、要中途外出，或遇颱風可能延期時的注意事項</p>
       </div>
     </header>
 
@@ -487,6 +466,19 @@
           <li>於報到時繳交紙本給工作人員。</li>
         </ol>
         <p class="note">請點擊上方連結自行下載表單，列印填寫後於報到時繳交。</p>
+      </article>
+
+      <article class="card card-wide">
+        <p class="card-icon">🌀</p>
+        <h3>颱風應變計畫</h3>
+        <p class="card-body">因應颱風可能來襲，營期將依彰化地區停班停課公告彈性調整，調整方式如下：</p>
+        <ul class="pin-list">
+          <li><span class="pin pin-num">1</span>若彰化地區於 7/20（一）宣布停止上班上課，當日活動將不進行，營期改為 <strong>7/21～7/23</strong>。</li>
+          <li><span class="pin pin-num">2</span>若彰化地區於 7/20（一）及 7/21（二）皆宣布停止上班上課，兩日活動皆不進行，營期改為 <strong>7/22～7/23</strong>。</li>
+          <li><span class="pin pin-num">3</span>若停班停課再延至第三天（7/22），本梯營隊將<strong>宣布停辦</strong>。</li>
+          <li><span class="pin pin-num">4</span>學員若因居住地風雨過大，或當地政府公告停班停課而無法前來，將依營隊準備進度酌情退費。</li>
+        </ul>
+        <p class="note">請學員與家長密切注意群組公告，並提前安排交通與行程，感謝您的理解與配合。</p>
       </article>
     </div>
   </section>
