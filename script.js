@@ -226,22 +226,6 @@
   }
   initChecklist();
 
-  /* ---------- reset progress ---------- */
-  const resetProgressBtn = document.getElementById('resetProgressBtn');
-  if (resetProgressBtn) {
-    resetProgressBtn.addEventListener('click', () => {
-      const confirmed = window.confirm('確定要重置你的任務進度嗎？所有已勾選的裝備紀錄都會被清除，此動作無法復原。');
-      if (!confirmed) return;
-      try {
-        localStorage.removeItem(storageKeyFor(getCurrentName()));
-      } catch (e) {
-        /* storage unavailable — fail silently */
-      }
-      checkboxes.forEach(cb => { cb.checked = false; });
-      updateProgress();
-    });
-  }
-
   /* ---------- transport tabs ---------- */
   const tabs = document.querySelectorAll('.tab');
   const panels = document.querySelectorAll('.tab-panel');

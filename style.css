@@ -93,14 +93,6 @@ main{position:relative; z-index:1; margin-left:260px;}
 .mini-progress-fill{ height:100%; width:0%; background:linear-gradient(90deg, var(--coral), var(--sun)); transition:width .4s ease; }
 .mini-progress-label{ margin-top:6px !important; font-family:var(--font-mono); }
 
-.reset-btn{
-  margin-top:12px; width:100%; display:inline-flex; align-items:center; justify-content:center; gap:6px;
-  background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.28); color:#EAF6EC;
-  padding:9px 10px; border-radius:10px; font-size:.76rem; font-family:var(--font-mono);
-  letter-spacing:.02em; cursor:pointer; transition:background .2s ease, transform .15s ease;
-}
-.reset-btn:hover{ background:rgba(255,255,255,.18); transform:translateY(-1px); }
-
 .nav-toggle{
   position:fixed; top:18px; left:18px; z-index:60;
   width:44px; height:44px; border-radius:12px; border:none;
