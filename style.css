@@ -186,7 +186,6 @@ main{position:relative; z-index:1; margin-left:260px;}
 .stat-label{ margin:0; font-size:.74rem; color:var(--ink-soft); font-family:var(--font-mono); }
 .stat-value{ margin:4px 0 0; font-family:var(--font-display); font-weight:700; color:var(--forest); font-size:1.15rem; }
 .stat-unit{ font-size:.78rem; color:var(--ink-soft); font-weight:500; }
-.date-chip{ white-space:nowrap; display:inline-block; }
 
 .hero-cta{ display:flex; gap:14px; flex-wrap:wrap; }
 
