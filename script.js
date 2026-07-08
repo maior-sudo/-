@@ -20,7 +20,6 @@
       id: 2,
       leaders: ['過宥熙', '吳思涵', '謝宇嫻'],
       members: [
-        { name: '周祐康', school: 'Tomahawk Creek Middle School' },
         { name: '張登傑', school: '西苑高中' },
         { name: '林守峻', school: '育達高中' },
         { name: '洪湘玲', school: '曉明女中' },
