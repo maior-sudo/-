@@ -41,10 +41,6 @@
 
   const TOTAL_ITEMS = checkboxes.length;
 
-  // Tracks the previous percentage so we only fire the popup once,
-  // right when progress *crosses into* 100% (not on initial page load).
-  let lastPct = null;
-
   function loadState() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -74,10 +70,6 @@
     progressPercent.textContent = `${pct}%`;
     miniFill.style.width = `${pct}%`;
     miniLabel.textContent = `任務進度 ${pct}%`;
-
-    const justReached100 = pct === 100 && lastPct !== null && lastPct !== 100;
-    lastPct = pct;
-    if (justReached100) openCompleteModal();
   }
 
   function initChecklist() {
@@ -96,41 +88,6 @@
   }
   initChecklist();
 
-  /* ---------- mission-complete popup ---------- */
-  const completeModal = document.getElementById('completeModal');
-  const completeBackdrop = document.getElementById('completeBackdrop');
-  const completeCloseBtn = document.getElementById('completeCloseBtn');
-
-  function openCompleteModal() {
-    if (!completeModal) return;
-    completeModal.hidden = false;
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeCompleteModal() {
-    if (!completeModal) return;
-    completeModal.hidden = true;
-    document.body.style.overflow = '';
-  }
-
-  if (completeBackdrop) completeBackdrop.addEventListener('click', closeCompleteModal);
-  if (completeCloseBtn) completeCloseBtn.addEventListener('click', closeCompleteModal);
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && completeModal && !completeModal.hidden) closeCompleteModal();
-  });
-
-  const closePageBtn = document.getElementById('closePageBtn');
-  if (closePageBtn) {
-    closePageBtn.addEventListener('click', () => {
-      window.close();
-      // Some browsers block window.close() on pages not opened via script;
-      // fall back to a blank page so it at least feels "closed".
-      setTimeout(() => {
-        window.location.href = 'about:blank';
-      }, 300);
-    });
-  }
-
   /* ---------- reset progress ---------- */
   const resetProgressBtn = document.getElementById('resetProgressBtn');
   if (resetProgressBtn) {
@@ -143,7 +100,6 @@
         /* storage unavailable — fail silently */
       }
       checkboxes.forEach(cb => { cb.checked = false; });
-      closeCompleteModal();
       updateProgress();
     });
   }

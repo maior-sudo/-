@@ -404,36 +404,6 @@ tr:last-child td{ border-bottom:none; }
 .step-list a{ color:var(--forest); font-weight:700; text-decoration:underline; text-underline-offset:2px; }
 .step-list a:hover{ color:var(--coral); }
 
-/* ===== modal ===== */
-.modal{ position:fixed; inset:0; z-index:90; display:flex; align-items:center; justify-content:center; padding:20px; }
-.modal[hidden]{ display:none; }
-.modal-backdrop{ position:absolute; inset:0; background:rgba(31,92,66,.5); backdrop-filter:blur(2px); }
-.modal-close{
-  position:absolute; top:18px; right:18px; width:36px; height:36px; border-radius:50%;
-  border:1px solid var(--line); background:#fff; cursor:pointer; font-size:1rem; color:var(--ink-soft);
-}
-
-.sr-only{
-  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
-  overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
-}
-
-/* ===== mission-complete popup ===== */
-.complete-panel{
-  position:relative; max-width:440px; width:100%; border-radius:20px;
-  overflow:hidden; background:var(--paper); box-shadow:0 34px 70px -20px rgba(0,0,0,.42);
-  padding:0;
-}
-.complete-panel .modal-close{ background:rgba(255,255,255,.92); }
-.complete-content{
-  padding:48px 32px 40px; text-align:center; display:flex; flex-direction:column; align-items:center;
-}
-.complete-icon{ font-size:2.6rem; margin:0 0 6px; }
-.complete-content h3{ margin:0 0 8px; font-size:1.3rem; }
-.complete-text{ color:var(--ink-soft); font-size:1rem; margin:0 0 26px; }
-.complete-btn-row{ display:flex; gap:12px; width:100%; }
-.complete-btn{ flex:1; justify-content:center; }
-
 /* ===== social links (contact section) ===== */
 .social-links{ display:flex; gap:12px; flex-wrap:wrap; margin-top:24px; padding-top:24px; border-top:1px dashed var(--line); }
 .social-pill{
