@@ -39,16 +39,16 @@
   <ul class="nav-list">
     <li><a href="#home" class="nav-link active" data-label="01">主頁</a></li>
     <li><a href="#schedule" class="nav-link" data-label="02">活動時間</a></li>
-    <li><a href="#teams" class="nav-link" data-label="03">分隊查詢</a></li>
-    <li><a href="#checklist" class="nav-link" data-label="04">行李裝備</a></li>
-    <li><a href="#transport" class="nav-link" data-label="05">交通路線</a></li>
-    <li><a href="#rules" class="nav-link" data-label="06">退費與中途離營規定</a></li>
-    <li><a href="#contact" class="nav-link" data-label="07">聯絡資訊</a></li>
+    <li><a href="#checklist" class="nav-link" data-label="03">行李裝備</a></li>
+    <li><a href="#transport" class="nav-link" data-label="04">交通路線</a></li>
+    <li><a href="#rules" class="nav-link" data-label="05">退費與中途離營規定</a></li>
+    <li><a href="#contact" class="nav-link" data-label="06">聯絡資訊</a></li>
   </ul>
   <div class="sidebar-foot">
     <p>準備進度</p>
     <div class="mini-progress"><div id="miniProgressFill" class="mini-progress-fill"></div></div>
     <p id="miniProgressLabel" class="mini-progress-label">準備進度 0%</p>
+    <button id="resetProgressBtn" class="reset-btn" type="button">↺ 重置進度</button>
   </div>
 </nav>
 
@@ -64,13 +64,13 @@
       </div>
 
       <p class="eyebrow">4 天 3 夜·行前準備手冊  </p>
-      <h1>2026彰師化學營<br><span class="accent">準備出發</span> 🧪</h1>
-      <p class="hero-sub">準備好挑戰這次的化學營了嗎？點擊來查詢自己的小隊分隊結果與進行行李打包</p>
+      <h1>2026彰師化學營<br><span class="accent"準備出動</span>準備出發 🧪</h1>
+      <p class="hero-sub">準備好挑戰這次的化學營了嗎？點擊開始確認行前準備進度與行李打包</p>
 
       <div class="hero-stats">
         <div class="stat-card">
           <p class="stat-label">活動日期</p>
-          <p class="stat-value">7/20–7/23</p>
+          <p class="stat-value"><span class="date-part">7/20<span class="stat-unit">（一）</span></span><span class="date-sep">–</span><span class="date-part">7/23<span class="stat-unit">（四）</span></span></p>
         </div>
         <div class="stat-card">
           <p class="stat-label">集合報到時間</p>
@@ -83,7 +83,7 @@
       </div>
 
       <div class="hero-cta">
-        <a href="#teams" class="btn-mission btn-mission-solid">開始進行準備 START PREP →</a>
+        <a href="#checklist" class="btn-mission btn-mission-solid">開始進行準備 START PREP →</a>
         <a href="#transport" class="btn-mission">確認交通方式</a>
       </div>
     </div>
@@ -123,7 +123,7 @@
       <div class="mission-bar">
         <span class="mission-dot" aria-hidden="true"></span>
         <span class="mission-tag">SYSTEM://SCHEDULE</span>
-        <span class="mission-index">02 / 07</span>
+        <span class="mission-index">02 / 06</span>
       </div>
       <div class="mission-body">
         <p class="eyebrow">任務時程與基地</p>
@@ -221,44 +221,20 @@
     </div>
   </section>
 
-  <!-- ============ TEAM FINDER ============ -->
-  <section id="teams" class="section">
-    <header class="section-head mission-panel">
-      <div class="mission-bar">
-        <span class="mission-dot" aria-hidden="true"></span>
-        <span class="mission-tag">SYSTEM://SQUAD_ROSTER</span>
-        <span class="mission-index">03 / 07</span>
-      </div>
-      <div class="mission-body">
-        <p class="eyebrow">分隊名單</p>
-        <h2>分隊名單</h2>
-        <p class="section-desc">依小隊順序列出全員名單，找到你的隊輔與同隊夥伴吧！</p>
-      </div>
-    </header>
-
-    <div id="teamsListBody" class="teams-list"></div>
-  </section>
-
   <!-- ============ CHECKLIST ============ -->
   <section id="checklist" class="section section-alt">
     <header class="section-head mission-panel">
       <div class="mission-bar">
         <span class="mission-dot" aria-hidden="true"></span>
         <span class="mission-tag">SYSTEM://EQUIPMENT</span>
-        <span class="mission-index">04 / 07</span>
+        <span class="mission-index">03 / 06</span>
       </div>
       <div class="mission-body">
         <p class="eyebrow">裝備清單</p>
         <h2>裝備清單</h2>
-        <p class="section-desc">勾選你已經準備好的物品，進度槽會即時顯示與自動儲存你的打包進度。</p>
+        <p class="section-desc">勾選你已經準備好的物品，進度槽會即時顯示與自動儲存你的打包進度，透過點擊左下角可以重置進度。</p>
       </div>
     </header>
-
-    <div class="user-id-box">
-      <label for="userNameInput">👤 輸入你的名字，你的清單只有你自己看得到</label>
-      <input type="text" id="userNameInput" placeholder="例如：王小明" autocomplete="off">
-      <p class="user-id-hint">不同名字＝不同的清單紀錄，就算用同一台裝置也不會互相蓋掉。</p>
-    </div>
 
     <div class="checklist-layout">
       <div class="beaker-wrap" aria-hidden="true">
@@ -321,6 +297,7 @@
         <div class="check-group check-group-warning">
           <h3>⚠ 實驗裝備</h3>
           <p class="warning-note">營期中安排豐富課程與實驗操作，務必<strong>攜帶長褲及包鞋</strong>才能進行實驗，嚴禁穿短褲／涼鞋／拖鞋進入實驗室。若未依規定進行，可能會視情況禁止實驗操作，為安全請務必遵守規定。</p>
+          <p class="warning-note">提醒：<strong>營服布料較透</strong>，建議內搭素色背心或小可愛，避免尷尬。</p>
           <ul class="check-list" data-group="lab">
             <li><label><input type="checkbox" data-item="長褲"><span>長褲</span></label></li>
             <li><label><input type="checkbox" data-item="包鞋"><span>包鞋</span></label></li>
@@ -345,7 +322,7 @@
       <div class="mission-bar">
         <span class="mission-dot" aria-hidden="true"></span>
         <span class="mission-tag">SYSTEM://TRANSPORT_ROUTE</span>
-        <span class="mission-index">05 / 07</span>
+        <span class="mission-index">04 / 06</span>
       </div>
       <div class="mission-body">
         <p class="eyebrow">交通路線</p>
@@ -445,7 +422,7 @@
       <div class="mission-bar">
         <span class="mission-dot" aria-hidden="true"></span>
         <span class="mission-tag">SYSTEM://PROTOCOLS</span>
-        <span class="mission-index">06 / 07</span>
+        <span class="mission-index">05 / 06</span>
       </div>
       <div class="mission-body">
         <p class="eyebrow">退費與中途離營規定</p>
@@ -495,7 +472,7 @@
       <div class="mission-bar">
         <span class="mission-dot" aria-hidden="true"></span>
         <span class="mission-tag">SYSTEM://CONTACT_BASE</span>
-        <span class="mission-index">07 / 07</span>
+        <span class="mission-index">06 / 06</span>
       </div>
       <div class="mission-body">
         <p class="eyebrow">聯絡管道</p>
@@ -533,6 +510,23 @@
   </section>
 
 </main>
+
+<!-- ============ MISSION COMPLETE POPUP ============ -->
+<div id="completeModal" class="modal complete-modal" hidden>
+  <div class="modal-backdrop" id="completeBackdrop"></div>
+  <div class="complete-panel" role="dialog" aria-modal="true" aria-labelledby="completeTitle">
+    <button id="completeCloseBtn" class="modal-close" type="button" aria-label="關閉完成畫面">✕</button>
+    <div class="complete-content">
+      <p class="complete-icon" aria-hidden="true">🎉</p>
+      <h3 id="completeTitle">任務準備完成！</h3>
+      <p class="complete-text">期待與你們相見！</p>
+      <div class="complete-btn-row">
+        <a class="btn btn-primary complete-btn" href="https://drive.google.com/file/d/1awl5kTmnrBgG4TdQrvhjHyFBv2-8EM62/view?usp=sharing" target="_blank" rel="noopener noreferrer">點擊</a>
+        <button id="closePageBtn" class="btn btn-ghost complete-btn" type="button">關閉畫面</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script src="script.js"></script>
 </body>
