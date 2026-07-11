@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>準備進度後台｜2026 彰化師大化學營</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  body{ background:var(--cream); }
+  .admin-wrap{ max-width:960px; margin:0 auto; padding:48px 24px 80px; }
+  .admin-header{ margin-bottom:28px; }
+  .admin-header h1{ font-family:var(--font-display); color:var(--forest); font-size:1.7rem; margin:0 0 6px; }
+  .admin-header p{ color:var(--ink-soft); font-size:.9rem; margin:0; }
+
+  .gate-card{
+    max-width:380px; margin:80px auto; background:#fff; border:1px solid var(--line);
+    border-radius:var(--radius); padding:32px; box-shadow:var(--shadow); text-align:center;
+  }
+  .gate-card p{ color:var(--ink-soft); font-size:.88rem; margin:0 0 16px; }
+  .gate-card input{
+    width:100%; padding:12px 16px; border-radius:999px; border:1.5px solid var(--line);
+    font-size:.95rem; margin-bottom:12px; text-align:center; box-sizing:border-box;
+  }
+  .gate-card input:focus{ outline:none; border-color:var(--leaf); }
+  .gate-error{ color:#C4491D; font-size:.82rem; min-height:1.2em; margin:0 0 8px; }
+
+  .summary-row{ display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:14px; margin-bottom:28px; }
+  .summary-card{
+    background:#fff; border:1px solid var(--line); border-radius:14px; padding:16px 18px;
+    box-shadow:var(--shadow); border-top:4px solid var(--leaf);
+  }
+  .summary-card .num{ font-family:var(--font-display); font-size:1.6rem; font-weight:700; color:var(--forest); }
+  .summary-card .label{ font-size:.78rem; color:var(--ink-soft); margin-top:2px; }
+
+  .roster-table{
+    width:100%; border-collapse:collapse; background:#fff; border-radius:var(--radius);
+    overflow:hidden; box-shadow:var(--shadow);
+  }
+  .roster-table th, .roster-table td{
+    padding:12px 16px; text-align:left; border-bottom:1px solid var(--line); font-size:.9rem;
+  }
+  .roster-table th{
+    background:var(--forest); color:#fff; font-family:var(--font-mono); font-size:.76rem;
+    letter-spacing:.03em; text-transform:uppercase;
+  }
+  .roster-table tr:last-child td{ border-bottom:none; }
+  .roster-table tr:hover td{ background:var(--cream); }
+
+  .pct-bar-wrap{ display:flex; align-items:center; gap:10px; }
+  .pct-bar{ flex:1; height:8px; border-radius:999px; background:var(--line); overflow:hidden; }
+  .pct-bar-fill{ height:100%; background:linear-gradient(90deg, var(--sun), var(--leaf)); }
+  .pct-num{ font-weight:700; color:var(--forest); font-size:.84rem; width:38px; text-align:right; }
+
+  .empty-state{ text-align:center; padding:60px 20px; color:var(--ink-soft); }
+  .refresh-note{ font-size:.78rem; color:var(--ink-soft); margin-top:16px; }
+  [hidden]{ display:none !important; }
+</style>
+</head>
+<body>
+
+<!-- ============ SIMPLE PASSWORD GATE ============ -->
+<div id="gate" class="gate-card">
+  <p>🔒 這是活動工作人員專用頁面，請輸入密碼進入</p>
+  <input type="password" id="gatePassword" placeholder="請輸入密碼" autocomplete="off">
+  <p id="gateError" class="gate-error"></p>
+  <button id="gateSubmit" class="btn btn-primary" type="button" style="width:100%; justify-content:center;">進入後台</button>
+</div>
+
+<!-- ============ ADMIN DASHBOARD ============ -->
+<div id="dashboard" class="admin-wrap" hidden>
+  <div class="admin-header">
+    <h1>📋 全體準備進度總覽</h1>
+    <p>2026 彰化師大化學營・資料即時同步自學員裝備清單頁面</p>
+  </div>
+
+  <div class="summary-row">
+    <div class="summary-card">
+      <div class="num" id="statCount">0</div>
+      <div class="label">已同步人數</div>
+    </div>
+    <div class="summary-card" style="border-top-color:var(--sun);">
+      <div class="num" id="statAvg">0%</div>
+      <div class="label">平均準備度</div>
+    </div>
+    <div class="summary-card" style="border-top-color:var(--coral);">
+      <div class="num" id="statDone">0</div>
+      <div class="label">已達 100%</div>
+    </div>
+  </div>
+
+  <table class="roster-table">
+    <thead>
+      <tr>
+        <th>姓名</th>
+        <th>準備度</th>
+        <th>最後更新</th>
+      </tr>
+    </thead>
+    <tbody id="rosterBody"></tbody>
+  </table>
+
+  <div id="emptyState" class="empty-state" hidden>目前還沒有任何學員同步進度。</div>
+  <p class="refresh-note">＊此頁面會即時更新，不需要手動重新整理。</p>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDPnUIkMiRFipv6SySAySreAuSLc-JLmbM",
+    authDomain: "chem-f7947.firebaseapp.com",
+    databaseURL: "https://chem-f7947-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "chem-f7947",
+    storageBucket: "chem-f7947.firebasestorage.app",
+    messagingSenderId: "495393091325",
+    appId: "1:495393091325:web:b23b8f82bada38c9e6d894"
+  };
+  firebase.initializeApp(firebaseConfig);
+</script>
+<script>
+  (() => {
+    // ⚠️ 這只是簡易前端密碼保護，防得住一般人隨意瀏覽，
+    // 但防不了懂技術的人查看網頁原始碼繞過。如果資料敏感，之後建議升級成正式登入機制。
+    const ADMIN_PASSWORD = 'chem2026';
+    const SESSION_KEY = 'chemCamp2026AdminAuthed';
+
+    const gate = document.getElementById('gate');
+    const dashboard = document.getElementById('dashboard');
+    const gatePassword = document.getElementById('gatePassword');
+    const gateSubmit = document.getElementById('gateSubmit');
+    const gateError = document.getElementById('gateError');
+
+    function unlock() {
+      gate.hidden = true;
+      dashboard.hidden = false;
+      startListening();
+    }
+
+    function tryLogin() {
+      if (gatePassword.value === ADMIN_PASSWORD) {
+        try { sessionStorage.setItem(SESSION_KEY, '1'); } catch (e) {}
+        unlock();
+      } else {
+        gateError.textContent = '密碼錯誤，請再試一次';
+        gatePassword.value = '';
+        gatePassword.focus();
+      }
+    }
+
+    gateSubmit.addEventListener('click', tryLogin);
+    gatePassword.addEventListener('keydown', (e) => { if (e.key === 'Enter') tryLogin(); });
+
+    try {
+      if (sessionStorage.getItem(SESSION_KEY) === '1') unlock();
+    } catch (e) {}
+
+    /* ---------- dashboard data ---------- */
+    const statCount = document.getElementById('statCount');
+    const statAvg = document.getElementById('statAvg');
+    const statDone = document.getElementById('statDone');
+    const rosterBody = document.getElementById('rosterBody');
+    const emptyState = document.getElementById('emptyState');
+
+    function formatTime(ts) {
+      if (!ts) return '—';
+      const d = new Date(ts);
+      return d.toLocaleString('zh-TW', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function startListening() {
+      if (!window.firebase || !firebase.database) {
+        emptyState.hidden = false;
+        emptyState.textContent = '⚠️ 雲端服務載入失敗，請確認網路連線後重新整理頁面。';
+        return;
+      }
+      firebase.database().ref('progress').on('value', (snapshot) => {
+        const data = snapshot.val() || {};
+        const rows = Object.keys(data).map(key => {
+          const entry = data[key] || {};
+          const meta = entry._meta || {};
+          return {
+            name: meta.name || key,
+            pct: typeof meta.pct === 'number' ? meta.pct : 0,
+            updatedAt: meta.updatedAt || null
+          };
+        }).sort((a, b) => b.pct - a.pct || a.name.localeCompare(b.name, 'zh-Hant'));
+
+        statCount.textContent = rows.length;
+        const avg = rows.length ? Math.round(rows.reduce((sum, r) => sum + r.pct, 0) / rows.length) : 0;
+        statAvg.textContent = `${avg}%`;
+        statDone.textContent = rows.filter(r => r.pct === 100).length;
+
+        if (!rows.length) {
+          rosterBody.innerHTML = '';
+          emptyState.hidden = false;
+          emptyState.textContent = '目前還沒有任何學員同步進度。';
+          return;
+        }
+        emptyState.hidden = true;
+
+        rosterBody.innerHTML = rows.map(r => `
+          <tr>
+            <td>${escapeHtml(r.name)}</td>
+            <td>
+              <div class="pct-bar-wrap">
+                <div class="pct-bar"><div class="pct-bar-fill" style="width:${r.pct}%"></div></div>
+                <span class="pct-num">${r.pct}%</span>
+              </div>
+            </td>
+            <td>${formatTime(r.updatedAt)}</td>
+          </tr>
+        `).join('');
+      }, (err) => {
+        emptyState.hidden = false;
+        emptyState.textContent = '⚠️ 讀取資料失敗，請確認 Firebase 規則是否允許讀取 progress 節點。';
+      });
+    }
+  })();
+</script>
+</body>
+</html>

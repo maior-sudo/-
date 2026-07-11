@@ -9,6 +9,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<!-- GoatCounter 網站瀏覽人數統計：
+     請把下方網址中的 chemcamp2026 換成你在 goatcounter.com 註冊的 site code -->
+<script data-goatcounter="https://chemcamp2026.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
 
@@ -235,6 +239,15 @@
         <p class="section-desc">勾選你已經準備好的物品，進度槽會即時顯示與自動儲存你的打包進度，透過點擊左下角可以重置進度。</p>
       </div>
     </header>
+
+    <div class="name-gate" id="nameGate">
+      <p class="name-gate-label">👤 輸入你的姓名，才能把準備進度同步到雲端（換手機／電腦查看時，輸入同樣姓名即可接續）</p>
+      <div class="name-gate-row">
+        <input type="text" id="studentNameInput" class="name-gate-input" placeholder="請輸入姓名，例如：王小明" autocomplete="name">
+        <button id="studentNameConfirm" class="btn btn-primary" type="button">確認</button>
+      </div>
+      <p id="nameGateStatus" class="name-gate-status"></p>
+    </div>
 
     <div class="checklist-layout">
       <div class="beaker-wrap" aria-hidden="true">
@@ -513,6 +526,21 @@
 
 </main>
 
+<!-- Firebase (Realtime Database) — 讓裝備準備進度可跨裝置同步 -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDPnUIkMiRFipv6SySAySreAuSLc-JLmbM",
+    authDomain: "chem-f7947.firebaseapp.com",
+    databaseURL: "https://chem-f7947-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "chem-f7947",
+    storageBucket: "chem-f7947.firebasestorage.app",
+    messagingSenderId: "495393091325",
+    appId: "1:495393091325:web:b23b8f82bada38c9e6d894"
+  };
+  firebase.initializeApp(firebaseConfig);
+</script>
 <script src="script.js"></script>
 </body>
 </html>

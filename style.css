@@ -291,6 +291,20 @@ main{position:relative; z-index:1; margin-left:260px;}
 }
 
 /* ===== checklist ===== */
+.name-gate{
+  background:#fff; border:1.5px dashed var(--leaf); border-radius:var(--radius);
+  padding:20px 24px; margin-bottom:24px; box-shadow:var(--shadow);
+}
+.name-gate-label{ font-size:.88rem; color:var(--ink-soft); margin:0 0 12px; }
+.name-gate-row{ display:flex; gap:10px; flex-wrap:wrap; }
+.name-gate-input{
+  flex:1 1 220px; padding:11px 16px; border-radius:999px;
+  border:1.5px solid var(--line); font-size:.94rem; font-family:var(--font-body);
+  color:var(--ink); background:var(--cream);
+}
+.name-gate-input:focus{ outline:none; border-color:var(--leaf); background:#fff; }
+.name-gate-status{ margin:10px 0 0; font-size:.82rem; color:var(--forest); font-weight:600; min-height:1.2em; }
+
 .checklist-layout{ display:flex; gap:48px; flex-wrap:wrap; align-items:flex-start; }
 .beaker-wrap{
   flex:0 0 200px; text-align:center; position:sticky; top:110px;
